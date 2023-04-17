@@ -14,12 +14,11 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import LogOutButton from "../LogOutButton/LogOutButton";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -72,6 +71,7 @@ const SideBar = () => {
   const [open, setOpen] = React.useState(true);
   const user = useSelector((store) => store.user);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -144,15 +144,19 @@ const SideBar = () => {
                 </ListItemButton>
               </ListItem>
 
-              <LogOutButton />
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => history.push("/about")}>
+                  <ListItemText primary={"About"} />
+                </ListItemButton>
+              </ListItem>
+
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => dispatch({type: 'LOGOUT' })}>
+                  <ListItemText primary={"Logout"} />
+                </ListItemButton>
+              </ListItem>
             </>
           )}
-
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => history.push("/about")}>
-              <ListItemText primary={"About"} />
-            </ListItemButton>
-          </ListItem>
         </List>
         {/* <Divider />
         <List>
