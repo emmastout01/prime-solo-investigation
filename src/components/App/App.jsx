@@ -21,6 +21,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 
 import './App.css';
+import SideBar from '../SideBar/SideBar';
 
 function App() {
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ function App() {
   return (
     <Router>
       <div>
-        <Nav />
+      {user.id ? <SideBar /> : <Nav />}
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
           <Redirect exact from="/" to="/home" />
