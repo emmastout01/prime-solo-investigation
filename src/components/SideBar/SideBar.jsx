@@ -151,6 +151,12 @@ const SideBar = () => {
               </ListItem>
 
               <ListItem disablePadding>
+                <ListItemButton onClick={() => history.push("/newGroup")}>
+                  <ListItemText primary={"Create New Group"} />
+                </ListItemButton>
+              </ListItem>
+              <Divider />
+              <ListItem disablePadding>
                 <ListItemButton onClick={() => dispatch({type: 'LOGOUT' })}>
                   <ListItemText primary={"Logout"} />
                 </ListItemButton>

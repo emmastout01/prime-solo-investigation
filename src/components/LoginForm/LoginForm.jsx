@@ -33,7 +33,7 @@ function LoginForm() {
           {errors.loginMessage}
         </h3>
       )}
-      <div className="login-inputs">
+      <div className="form-inputs">
         <div>
           <TextField
             type="text"

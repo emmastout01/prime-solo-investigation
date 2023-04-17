@@ -22,6 +22,7 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 
 import './App.css';
 import SideBar from '../SideBar/SideBar';
+import NewGroupPage from '../NewGroupPage/NewGroupPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -67,6 +68,13 @@ function App() {
             path="/info"
           >
             <InfoPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute 
+            exact
+            path='/newGroup'
+          >
+            <NewGroupPage />
           </ProtectedRoute>
 
           <Route
