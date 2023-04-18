@@ -20,7 +20,8 @@ const GroupDashboard = () => {
   }, []);
 
   const addNewCategory = () => {
-    dispatch({ type: 'ADD_NEW_CATEGORY', payload: {...newCategory, budgetId: groupInfo.id} });
+    dispatch({ type: 'ADD_NEW_CATEGORY', payload: {...newCategory, budgetId: groupInfo.id, groupId: groupId.id} });
+    setNewCategory({ name: "", amount: "" });
   }
 
   console.log("New category:", newCategory);

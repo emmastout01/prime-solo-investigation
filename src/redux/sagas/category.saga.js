@@ -4,7 +4,7 @@ import { put, takeLatest } from 'redux-saga/effects';
 function* addNewCategory (action) {
   yield axios.post('/api/categories', action.payload);
   // get all categories
-  yield put({ type: 'FETCH_GROUP_BUDGET' });
+  yield put({ type: 'FETCH_GROUP_CATEGORIES', payload: action.payload.groupId });
 }
 
 function* fetchGroupCategories(action) {
