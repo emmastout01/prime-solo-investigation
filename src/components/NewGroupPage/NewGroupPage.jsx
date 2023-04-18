@@ -73,7 +73,6 @@ const NewGroupPage = () => {
           <div className="form-inputs">
             <TextField
               type="text"
-              id="outlined-basic"
               label="Group Name"
               variant="outlined"
               required
@@ -83,7 +82,6 @@ const NewGroupPage = () => {
             />
             <TextField
               type="Number"
-              id="outlined-basic"
               label="Income"
               variant="outlined"
               required
@@ -93,7 +91,6 @@ const NewGroupPage = () => {
             />
             <TextField
               type="Number"
-              id="outlined-basic"
               label="Income"
               variant="outlined"
               onChange={(e) =>
@@ -110,7 +107,6 @@ const NewGroupPage = () => {
             <div className="category-form">
               <TextField
                 type="text"
-                id="outlined-basic"
                 label="Name"
                 variant="outlined"
                 required
@@ -121,7 +117,6 @@ const NewGroupPage = () => {
               />
               <TextField
                 type="Number"
-                id="outlined-basic"
                 label="Amount"
                 variant="outlined"
                 required
@@ -143,7 +138,6 @@ const NewGroupPage = () => {
                 <h3>{category.name}</h3>
                 <TextField
                   type="Number"
-                  id="outlined-basic"
                   label="Amount"
                   variant="outlined"
                   required

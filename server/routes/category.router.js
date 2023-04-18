@@ -29,7 +29,20 @@ router.get("/:id", (req, res) => {
  * POST route template
  */
 router.post("/", (req, res) => {
-  // POST route code here
+  const newCategory = req.body;
+  console.log(newCategory);
+  const sqlText = `INSERT INTO "categories" ("name", "budgetAmount", "budgetId")
+  VALUES ($1, $2, $3);`;
+
+  pool
+    .query(sqlText, [newCategory.name, newCategory.amount, newCategory.budgetId])
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log("Get request for user budget failed: ", err);
+      res.sendStatus(500);
+    });
 });
 
 module.exports = router;
