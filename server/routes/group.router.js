@@ -1,15 +1,39 @@
 const express = require("express");
 const pool = require("../modules/pool");
 const router = express.Router();
+const {
+  rejectUnauthenticated,
+} = require("../modules/authentication-middleware");
 
 // GET route
 router.get("/user/:username", (req, res) => {
-  const username = req.params.username
+  const username = req.params.username;
   const sqlText = `SELECT * FROM "user" WHERE "username" = $1`;
   // console.log('req.params.username:' , username);
 
   pool
     .query(sqlText, [username])
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log("User registration failed: ", err);
+      res.sendStatus(500);
+    });
+});
+
+router.get("/userGroups", rejectUnauthenticated, (req, res) => {
+  const userId = req.user.id;
+  const sqlText = `
+    SELECT "user".id, "user".username, "groups".id AS "groupId", "groups".name, "budget".id, "budget"."totalBudget" FROM "user_groups"
+    JOIN "user" ON "user".id = user_groups."userId"
+    JOIN "groups" ON "groups".id = user_groups."groupsId"
+    JOIN "budget" ON "budget".id = "groups"."budgetId"
+    WHERE "user".id = $1;
+  `;
+
+  pool
+    .query(sqlText, [userId])
     .then((result) => {
       res.send(result.rows);
     })
@@ -76,7 +100,7 @@ router.post("/createUserGroup", (req, res) => {
     });
 });
 
-router.post('/createCategories', (req, res) => {
+router.post("/createCategories", (req, res) => {
   let category = req.body.category;
   let budgetId = req.body.id;
   const queryText = `INSERT INTO "categories" ("name", "budgetAmount", "budgetId")
@@ -96,8 +120,7 @@ router.post('/createCategories', (req, res) => {
   //   });
   // })
 
-  
-    pool
+  pool
     .query(queryText, [category.name, category.budgetAmount, budgetId])
     .then((result) => {
       res.sendStatus(201);
@@ -106,6 +129,6 @@ router.post('/createCategories', (req, res) => {
       console.log("Category creation failed: ", err);
       res.sendStatus(500);
     });
-})
+});
 
 module.exports = router;

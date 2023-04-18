@@ -2,6 +2,7 @@ import { TextField, IconButton, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import "./NewGroupPage.css";
 
 // TODO
@@ -24,6 +25,7 @@ const NewGroupPage = () => {
   ]);
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   // console.log(newBudget);
   // console.log(categories);
@@ -59,6 +61,8 @@ const NewGroupPage = () => {
 
     //Dispatch to create new group
     dispatch({ type: 'CREATE_GROUP', payload: newGroupObj })
+    // send to new group dashboard
+    history.push('/groupDashboard');
   }
 
   return (
