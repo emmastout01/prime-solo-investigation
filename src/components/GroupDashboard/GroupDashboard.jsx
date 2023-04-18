@@ -1,12 +1,34 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TextField, Button } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Box,
+  InputLabel,
+  MenuItem,
+  Select,
+  FormControl,
+} from "@mui/material";
 import BudgetCategoryTable from "../BudgetCategoryTable/BudgetCategoryTable";
+
+import "./GroupDashboard.css";
 
 const GroupDashboard = () => {
   const [newCategory, setNewCategory] = useState({ name: "", amount: "" });
-  const [newExpense, setNewExpense] = useState({});
+  const [newExpense, setNewExpense] = useState({
+    name: "",
+    categoryName: "",
+    amount: "",
+  });
+
+  const handleChange = (category) => {
+    setNewExpense({
+      ...newExpense,
+      categoryName: category.categoryName,
+      categoryId: category.id,
+    });
+  };
 
   const groupId = useParams();
   const dispatch = useDispatch();
@@ -20,11 +42,22 @@ const GroupDashboard = () => {
   }, []);
 
   const addNewCategory = () => {
-    dispatch({ type: 'ADD_NEW_CATEGORY', payload: {...newCategory, budgetId: groupInfo.id, groupId: groupId.id} });
+    dispatch({
+      type: "ADD_NEW_CATEGORY",
+      payload: { ...newCategory, budgetId: groupInfo.id, groupId: groupId.id },
+    });
     setNewCategory({ name: "", amount: "" });
-  }
+  };
 
-  console.log("New category:", newCategory);
+  const addExpense = () => {
+    let expensePayload = { ...newExpense, budgetId: groupInfo.id };
+    console.log(expensePayload);
+    dispatch({ type: "ADD_NEW_EXPENSE", payload: expensePayload });
+    setNewExpense({ name: "", categoryName: "", amount: "" });
+  };
+
+  // console.log("New category:", newCategory);
+  console.log("New expense:", newExpense);
 
   return (
     <div className="main-wrapper">
@@ -33,10 +66,55 @@ const GroupDashboard = () => {
       {/* stretch: implement monthly take home based on taxes by state */}
       <h2>Monthly Income: {Math.round(groupInfo.totalBudget / 12)}</h2>
 
+      {/* look up stack mui for arranging items in line */}
       <div className="add-expenses">
-        <TextField type="text" label="Expense Amount" variant="outlined" />
-        {/* select category here */}
-        <Button variant="contained">Add Expense</Button>
+        <FormControl>
+          <InputLabel id="demo-simple-select-label">Category</InputLabel>
+          <Select
+            variant="outlined"
+            labelId="demo-simple-select-label"
+            value={newExpense.categoryName}
+            label="Category"
+            sx={{
+              width: "194px",
+            }}
+          >
+            {categories[0] ? (
+              categories.map((category) => (
+                <MenuItem
+                  value={category.categoryName}
+                  key={category.id}
+                  onClick={() => handleChange(category)}
+                >
+                  {category.categoryName}
+                </MenuItem>
+              ))
+            ) : (
+              <div></div>
+            )}
+          </Select>
+        </FormControl>
+        <TextField
+          type="text"
+          label="Expense"
+          variant="outlined"
+          value={newExpense.name}
+          onChange={(e) =>
+            setNewExpense({ ...newExpense, name: e.target.value })
+          }
+        />
+        <TextField
+          type="number"
+          label="Expense Amount"
+          variant="outlined"
+          value={newExpense.amount}
+          onChange={(e) =>
+            setNewExpense({ ...newExpense, amount: Number(e.target.value) })
+          }
+        />
+        <Button variant="contained" onClick={addExpense}>
+          Add Expense
+        </Button>
       </div>
       <div className="add-category">
         <TextField
@@ -57,7 +135,9 @@ const GroupDashboard = () => {
             setNewCategory({ ...newCategory, amount: e.target.value })
           }
         />
-        <Button variant="contained" onClick={addNewCategory}>Add Category</Button>
+        <Button variant="contained" onClick={addNewCategory}>
+          Add Category
+        </Button>
       </div>
 
       <section className="budgetCategories">

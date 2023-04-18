@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/:id", (req, res) => {
   const groupId = req.params.id;
   const sqlText = `
-    SELECT "categories".name AS "categoryName", "categories"."budgetAmount" FROM "budget"
+    SELECT "categories".id, "categories".name AS "categoryName", "categories"."budgetAmount" FROM "budget"
     JOIN "categories" ON "categories"."budgetId" = "budget".id
     JOIN "groups" ON "groups"."budgetId" = "budget".id
     WHERE "groups".id = $1;
