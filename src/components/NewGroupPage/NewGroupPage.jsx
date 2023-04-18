@@ -4,8 +4,14 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import "./NewGroupPage.css";
 
+// TODO
+// some info letting user know that budget line items are per month
+// check if username is exists in database, only let them add the person if it does
+
 const NewGroupPage = () => {
   const [newBudget, setNewBudget] = useState({ name: "", totalBudget: 0 });
+  const [income1, setIncome1] = useState(0);
+  const [income2, setIncome2] = useState(0);
   const [username, setUsername] = useState("");
   const [addedUser, setAddedUser] = useState("");
   const [newCategory, setNewCategory] = useState({
@@ -19,9 +25,9 @@ const NewGroupPage = () => {
 
   const dispatch = useDispatch();
 
-  console.log(newBudget);
-  console.log(categories);
-  console.log(newCategory);
+  // console.log(newBudget);
+  // console.log(categories);
+  // console.log(newCategory);
 
   //update budgetAmount on change
   const handleCategoryChange = (e, category, i) => {
@@ -48,7 +54,11 @@ const NewGroupPage = () => {
   };
 
   const createNewGroup = () => {
-    //dispatch stuff
+    let newGroupObj = {budget: {...newBudget, totalBudget: Number(income1) + Number(income2)}, username: addedUser, categories: categories}
+    console.log('Payload:', newGroupObj);
+
+    //Dispatch to create new group
+    dispatch({ type: 'CREATE_GROUP', payload: newGroupObj })
   }
 
   return (
@@ -74,10 +84,7 @@ const NewGroupPage = () => {
               variant="outlined"
               required
               onChange={(e) =>
-                setNewBudget({
-                  ...newBudget,
-                  totalBudget: newBudget.budget + Number(e.target.value),
-                })
+                setIncome1(e.target.value)
               }
             />
             <TextField
@@ -86,10 +93,7 @@ const NewGroupPage = () => {
               label="Income"
               variant="outlined"
               onChange={(e) =>
-                setNewBudget({
-                  ...newBudget,
-                  totalBudget: newBudget.budget + Number(e.target.value),
-                })
+                setIncome2(e.target.value)
               }
             />
           </div>
