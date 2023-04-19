@@ -3,7 +3,7 @@ import { put, takeLatest } from 'redux-saga/effects';
 
 function* addNewExpense(action) {
   yield axios.post('/api/expenses', action.payload);
-  yield put({ type: 'FETCH_ALL_CATEGORIES', payload: action.payload.budgetId})
+  yield put({ type: 'FETCH_GROUP_CATEGORIES', payload: action.payload.budgetId})
 }
 
 // function* fetchAllExpenses(action) {
