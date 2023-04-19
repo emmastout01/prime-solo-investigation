@@ -12,7 +12,6 @@ function* fetchGroupCategories(action) {
   yield put({ type: 'SET_GROUP_CATEGORIES', payload: response.data })
 }
 
-
 function* categorySaga() {
   yield takeLatest('ADD_NEW_CATEGORY', addNewCategory);
   yield takeLatest('FETCH_GROUP_CATEGORIES', fetchGroupCategories);

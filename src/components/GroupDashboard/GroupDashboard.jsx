@@ -25,8 +25,8 @@ const GroupDashboard = () => {
   const handleChange = (category) => {
     setNewExpense({
       ...newExpense,
-      categoryName: category.categoryName,
-      categoryId: category.id,
+      categoryName: category.name,
+      categoryId: category.id
     });
   };
 
@@ -35,7 +35,6 @@ const GroupDashboard = () => {
 
   const categories = useSelector((store) => store.categories);
   const groupInfo = useSelector((store) => store.groups);
-  const expenses = useSelector((store) => store.expenses);
 
   // store specific budget and categories in global state based on groupId from url params
   useEffect(() => {
@@ -82,11 +81,11 @@ const GroupDashboard = () => {
             {categories[0] ? (
               categories.map((category) => (
                 <MenuItem
-                  value={category.categoryName}
-                  key={category.id}
+                  value={category.name}
+                  key={category.name}
                   onClick={() => handleChange(category)}
                 >
-                  {category.categoryName}
+                  {category.name}
                 </MenuItem>
               ))
             ) : (

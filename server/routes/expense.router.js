@@ -16,7 +16,7 @@ router.post("/", (req, res) => {
     INSERT INTO "expenses" ("categoryId", "userId", "budget_id", "amount", "name")
     VALUES ($1, $2, $3, $4, $5)
   `;
-  console.log("in expense post request");
+  // console.log("in expense post request");
 
   pool
     .query(sqlText, [
