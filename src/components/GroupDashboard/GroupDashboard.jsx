@@ -35,11 +35,12 @@ const GroupDashboard = () => {
 
   const categories = useSelector((store) => store.categories);
   const groupInfo = useSelector((store) => store.groups);
+  const expenses = useSelector((store) => store.expenses);
 
   // store specific budget and categories in global state based on groupId from url params
   useEffect(() => {
-    dispatch({ type: "FETCH_GROUP_CATEGORIES", payload: groupId.id });
-  }, []);
+    groupInfo.id && dispatch({ type: 'FETCH_GROUP_CATEGORIES', payload: groupInfo.id });
+  }, [groupInfo]);
 
   const addNewCategory = () => {
     dispatch({
@@ -51,13 +52,12 @@ const GroupDashboard = () => {
 
   const addExpense = () => {
     let expensePayload = { ...newExpense, budgetId: groupInfo.id };
-    console.log(expensePayload);
     dispatch({ type: "ADD_NEW_EXPENSE", payload: expensePayload });
     setNewExpense({ name: "", categoryName: "", amount: "" });
   };
 
   // console.log("New category:", newCategory);
-  console.log("New expense:", newExpense);
+  // console.log("New expense:", newExpense);
 
   return (
     <div className="main-wrapper">
@@ -143,7 +143,7 @@ const GroupDashboard = () => {
       <section className="budgetCategories">
         {categories[0] ? (
           categories.map((item) => (
-            <BudgetCategoryTable key={item.categoryName} category={item} />
+            <BudgetCategoryTable key={item.name} category={item} />
           ))
         ) : (
           <></>

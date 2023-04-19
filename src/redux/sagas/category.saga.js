@@ -13,7 +13,6 @@ function* fetchGroupCategories(action) {
 }
 
 
-
 function* categorySaga() {
   yield takeLatest('ADD_NEW_CATEGORY', addNewCategory);
   yield takeLatest('FETCH_GROUP_CATEGORIES', fetchGroupCategories);
