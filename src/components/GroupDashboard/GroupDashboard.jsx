@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Button } from "@mui/material";
 import BudgetCategoryTable from "../BudgetCategoryTable/BudgetCategoryTable";
 import AddExpenseForm from "../AddExpenseForm/AddExpenseForm";
 import AddCategoryForm from "../AddCategoryForm/AddCategoryForm";
@@ -13,6 +13,8 @@ const GroupDashboard = () => {
   const dispatch = useDispatch();
 
   const categories = useSelector((store) => store.categories);
+  const groupInfo = useSelector((store) => store.groups);
+
   const { id, name, totalBudget } = useSelector((store) => store.groups);
 
   // store specific budget and categories in global state based on groupId from url params
@@ -22,6 +24,10 @@ const GroupDashboard = () => {
 
   // console.log("New category:", newCategory);
   // console.log("New expense:", newExpense);
+
+  const deleteAllExpenses = () => {
+    dispatch({ type: 'DELETE_ALL_EXPENSES', payload: groupInfo.id });
+  }
 
   return (
     <div className="main-wrapper">
@@ -33,6 +39,7 @@ const GroupDashboard = () => {
       {/* look up stack mui for arranging items in line */}
       <AddExpenseForm groupId={id} categories={categories} />
       <AddCategoryForm budgetId={id} groupId={groupId} />
+      <Button variant="contained" onClick={deleteAllExpenses}>Reset Expenses</Button>
 
       <Box>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>

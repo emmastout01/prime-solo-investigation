@@ -12,9 +12,6 @@ function* addNewExpense(action) {
 
 function* deleteExpense(action) {
   try {
-    // yield action.payload.expenseIds.map(expense => {
-    //   axios.delete(`/api/expenses/${expense}`);
-    // })
     // this is a delete request
     yield axios.post(`/api/expenses/delete`, action.payload.expenseIds);
     yield put({ type: 'FETCH_GROUP_CATEGORIES', payload: action.payload.budgetId})
@@ -23,9 +20,19 @@ function* deleteExpense(action) {
   }
 }
 
+function* deleteAllExpenses(action) {
+  try {
+    yield axios.delete(`/api/expenses/deleteAll/${action.payload}`);
+    yield put({ type: 'FETCH_GROUP_CATEGORIES', payload: action.payload})
+  } catch(error) {
+    console.log('Error in deleteAllExpenses saga:', error);
+  }
+}
+
 function* expenseSaga() {
   yield takeLatest('ADD_NEW_EXPENSE', addNewExpense);
   yield takeLatest('DELETE_EXPENSE', deleteExpense);
+  yield takeLatest('DELETE_ALL_EXPENSES', deleteAllExpenses);
 }
 
 export default expenseSaga;
