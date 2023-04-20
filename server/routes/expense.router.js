@@ -3,10 +3,6 @@ const pool = require("../modules/pool");
 const router = express.Router();
 
 /**
- * GET route template
- */
-
-/**
  * POST route template
  */
 router.post("/", (req, res) => {
@@ -71,6 +67,36 @@ router.post("/delete", (req, res) => {
     })
     .catch((error) => {
       console.log("Delete request for expense failed:", error);
+      res.sendStatus(500);
+    });
+});
+
+router.put("/update/:id", (req, res) => {
+  const expenseToUpdate = req.body;
+  console.log('Req.body as expenseToUpdate', expenseToUpdate);
+  let sqlText = ``;
+
+  if (expenseToUpdate.columnToUpdate === "amount") {
+    sqlText = `    
+      UPDATE "expenses" 
+      SET "amount" = ($1)
+      WHERE "id" = ($2)
+      ;`;
+  } else {
+    sqlText = `    
+      UPDATE "expenses" 
+      SET "name" = ($1)
+      WHERE "id" = ($2)
+    ;`;
+  }
+  console.log('Sqltext after alteration', sqlText)
+  pool
+    .query(sqlText, [expenseToUpdate.value, expenseToUpdate.id])
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log("Update request for expense failed:", error);
       res.sendStatus(500);
     });
 });
