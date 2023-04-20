@@ -7,28 +7,30 @@ const router = express.Router();
  */
 router.get("/:id", (req, res) => {
   const budgetId = req.params.id;
+  console.log('budgetId in category get request:', budgetId)
   // console.log("in expenses get request, budgetid:", budgetId);
 
   const sqlText = `
-  SELECT "categories".id, "categories".name, "categories"."budgetAmount",
-    CASE 
-      WHEN COUNT("expenses".id) > 0 
-      THEN JSON_AGG(JSON_BUILD_OBJECT(
-            'expenseCategoryId', "expenses"."categoryId",
-            'expenseName',"expenses".name, 
-            'expenseAmount',"expenses".amount,
-            'userId', "user".id,
-            'username', "user".username,
-            'id', "expenses".id
-          )) 
-      ELSE '[]'::json
-    END AS "expenses"
-  FROM "categories"
-  LEFT JOIN "expenses" ON "expenses"."categoryId" = "categories".id
-  LEFT JOIN "user" ON "user".id = "expenses"."userId"
-  WHERE "categories"."budgetId" = $1
-  GROUP BY "categories".id, "categoryId", "categories".name, "categories"."budgetAmount";
-  ;`;
+    SELECT "categories".id, "categories".name, "categories"."budgetAmount",
+      CASE 
+        WHEN COUNT("expenses".id) > 0 
+        THEN JSON_AGG(JSON_BUILD_OBJECT(
+              'expenseCategoryId', "expenses"."categoryId",
+              'expenseName',"expenses".name, 
+              'expenseAmount',"expenses".amount,
+              'userId', "user".id,
+              'username', "user".username,
+              'id', "expenses".id
+            )) 
+        ELSE '[]'::json
+      END AS "expenses"
+    FROM "categories"
+    LEFT JOIN "expenses" ON "expenses"."categoryId" = "categories".id
+    LEFT JOIN "user" ON "user".id = "expenses"."userId"
+    WHERE "categories"."budgetId" = $1
+    GROUP BY "categories".id, "categoryId", "categories".name, "categories"."budgetAmount"
+    ORDER BY "categories".id;
+  `;
 
   pool
     .query(sqlText, [budgetId])
