@@ -71,6 +71,24 @@ router.post("/delete", (req, res) => {
     });
 });
 
+router.delete("/deleteByCategory/:id", (req, res) => {
+  const idToDelete = req.params.id;
+
+  const sqlText = `
+    DELETE FROM "expenses" WHERE "categoryId" = $1;
+  `;
+
+  pool
+    .query(sqlText, [idToDelete])
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log("Delete request for expense by category failed:", error);
+      res.sendStatus(500);
+    });
+});
+
 router.put("/update/:id", (req, res) => {
   const expenseToUpdate = req.body;
   console.log('Req.body as expenseToUpdate', expenseToUpdate);
