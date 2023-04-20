@@ -30,7 +30,7 @@ const BudgetCategoryTable = ({ category }) => {
       type: "number",
       width: 110,
       editable: false,
-    }
+    },
   ];
 
   const rows = category.expenses;
@@ -44,19 +44,24 @@ const BudgetCategoryTable = ({ category }) => {
 
   const handleCellEditCommit = (params) => {
     let updatedExpenseObj = {};
-    if (params.field === 'expenseAmount') {
+    if (params.field === "expenseAmount") {
       updatedExpenseObj.value = Number(params.value);
-      updatedExpenseObj.columnToUpdate = 'amount';
-    } else if (params.field === 'expenseName') {
+      updatedExpenseObj.columnToUpdate = "amount";
+    } else if (params.field === "expenseName") {
       updatedExpenseObj.value = params.value;
-      updatedExpenseObj.columnToUpdate = 'name';
+      updatedExpenseObj.columnToUpdate = "name";
     }
     updatedExpenseObj.budgetId = groupInfo.id;
     updatedExpenseObj.id = params.id;
     // console.log(updatedExpenseObj);
-    
-    dispatch({ type: 'UPDATE_EXPENSE', payload: updatedExpenseObj });
+
+    dispatch({ type: "UPDATE_EXPENSE", payload: updatedExpenseObj });
   };
+
+  const deleteCategory = () => {
+    const deleteCategoryObj = {budgetId: groupInfo.id, categoryId: category.id}; 
+    dispatch({ type: 'DELETE_CATEGORY', payload: deleteCategoryObj })
+  }
 
   // console.log("newSelections:", selections);
 
@@ -86,11 +91,14 @@ const BudgetCategoryTable = ({ category }) => {
           onCellEditCommit={(params) => handleCellEditCommit(params)}
         />
       </Box>
-      {selections[0] && (
-        <Button variant="contained" onClick={handleDelete}>
-          Delete
-        </Button>
-      )}
+      <Stack direction="row" justifyContent="space-between">
+        {selections[0] && (
+          <Button variant="contained" onClick={handleDelete}>
+            Delete
+          </Button>
+        )}
+        <Button variant="contained" onClick={deleteCategory}>Delete Category</Button>
+      </Stack>
     </Grid>
   );
 };

@@ -7,7 +7,7 @@ const router = express.Router();
  */
 router.get("/:id", (req, res) => {
   const budgetId = req.params.id;
-  console.log('budgetId in category get request:', budgetId)
+  console.log("budgetId in category get request:", budgetId);
   // console.log("in expenses get request, budgetid:", budgetId);
 
   const sqlText = `
@@ -63,6 +63,24 @@ router.post("/", (req, res) => {
     })
     .catch((err) => {
       console.log("Get request for user budget failed: ", err);
+      res.sendStatus(500);
+    });
+});
+
+router.delete("/delete/:id", (req, res) => {
+  const idToDelete = req.params.id;
+
+  const sqlText = `
+    DELETE FROM "categories" WHERE "id" = $1;
+  ;`;
+
+  pool
+    .query(sqlText, [idToDelete])
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log("Delete category request failed:", err);
       res.sendStatus(500);
     });
 });
