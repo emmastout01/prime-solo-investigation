@@ -1,12 +1,12 @@
-const groupReducer = () => {
+const groups = (state = {}, action) => {
   switch (action.type) {
-    case 'SET_GROUP_ID':
+    case 'SET_USER_GROUPS':
       return action.payload;
-    case 'UNSET_GROUP_ID':
+    case 'UNSET_USER_GROUPS':
       return {};
     default:
       return state;
   }
 }
 
-export default groupReducer;
+export default groups;

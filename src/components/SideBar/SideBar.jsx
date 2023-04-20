@@ -15,6 +15,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -70,6 +71,7 @@ const SideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const user = useSelector((store) => store.user);
+  const groups = useSelector((store) => store.groups);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -149,13 +151,22 @@ const SideBar = () => {
                   <ListItemText primary={"About"} />
                 </ListItemButton>
               </ListItem>
+              
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => history.push(`/groupDashboard/${groups.groupId}`)}>
+                  {/* change name to reflect name of group */}
+                  <ListItemText primary={groups.name} />
+                </ListItemButton>
+              </ListItem>
 
               <ListItem disablePadding>
                 <ListItemButton onClick={() => history.push("/newGroup")}>
                   <ListItemText primary={"Create New Group"} />
                 </ListItemButton>
               </ListItem>
+
               <Divider />
+
               <ListItem disablePadding>
                 <ListItemButton onClick={() => dispatch({type: 'LOGOUT' })}>
                   <ListItemText primary={"Logout"} />

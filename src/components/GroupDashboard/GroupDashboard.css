@@ -1,0 +1,10 @@
+.add-expenses {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.add-category {
+  display: flex;
+  gap: 20px;
+}

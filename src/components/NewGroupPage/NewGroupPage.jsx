@@ -2,6 +2,7 @@ import { TextField, IconButton, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import "./NewGroupPage.css";
 
 // TODO
@@ -24,6 +25,7 @@ const NewGroupPage = () => {
   ]);
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   // console.log(newBudget);
   // console.log(categories);
@@ -59,6 +61,8 @@ const NewGroupPage = () => {
 
     //Dispatch to create new group
     dispatch({ type: 'CREATE_GROUP', payload: newGroupObj })
+    // send to new group dashboard
+    history.push('/groupDashboard');
   }
 
   return (
@@ -69,7 +73,6 @@ const NewGroupPage = () => {
           <div className="form-inputs">
             <TextField
               type="text"
-              id="outlined-basic"
               label="Group Name"
               variant="outlined"
               required
@@ -79,7 +82,6 @@ const NewGroupPage = () => {
             />
             <TextField
               type="Number"
-              id="outlined-basic"
               label="Income"
               variant="outlined"
               required
@@ -89,7 +91,6 @@ const NewGroupPage = () => {
             />
             <TextField
               type="Number"
-              id="outlined-basic"
               label="Income"
               variant="outlined"
               onChange={(e) =>
@@ -106,7 +107,6 @@ const NewGroupPage = () => {
             <div className="category-form">
               <TextField
                 type="text"
-                id="outlined-basic"
                 label="Name"
                 variant="outlined"
                 required
@@ -117,7 +117,6 @@ const NewGroupPage = () => {
               />
               <TextField
                 type="Number"
-                id="outlined-basic"
                 label="Amount"
                 variant="outlined"
                 required
@@ -139,7 +138,6 @@ const NewGroupPage = () => {
                 <h3>{category.name}</h3>
                 <TextField
                   type="Number"
-                  id="outlined-basic"
                   label="Amount"
                   variant="outlined"
                   required
