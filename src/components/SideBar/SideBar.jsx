@@ -168,6 +168,12 @@ const SideBar = () => {
               <Divider />
 
               <ListItem disablePadding>
+                <ListItemButton onClick={() => history.push("/profile")}>
+                  <ListItemText primary={user.username} />
+                </ListItemButton>
+              </ListItem>
+
+              <ListItem disablePadding>
                 <ListItemButton onClick={() => dispatch({type: 'LOGOUT' })}>
                   <ListItemText primary={"Logout"} />
                 </ListItemButton>
