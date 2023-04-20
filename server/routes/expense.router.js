@@ -35,4 +35,21 @@ router.post("/", (req, res) => {
     });
 });
 
+router.delete("/:id", (req, res) => {
+  const idToDelete = req.params.id;
+  const sqlText = `
+    DELETE FROM "expenses" WHERE "id" = $1
+  `;
+
+  pool
+    .query(sqlText, [idToDelete])
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log("Delete request for expense failed:", error);
+      res.sendStatus(500);
+    });
+});
+
 module.exports = router;
