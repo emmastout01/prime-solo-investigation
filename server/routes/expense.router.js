@@ -35,4 +35,26 @@ router.post("/", (req, res) => {
     });
 });
 
+router.post("/delete", (req, res) => {
+  // const idToDelete = req.params.id;
+  // console.log('req.body:',req.body);
+
+  // dynamically generate sql text depending on number of ids in req.body
+  const sqlText = `
+    DELETE FROM "expenses" WHERE "id" IN (${req.body.map((id, i) => {
+      return `$${i+1}`
+    })});
+  `;
+  
+  pool
+    .query(sqlText, req.body)
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log("Delete request for expense failed:", error);
+      res.sendStatus(500);
+    });
+});
+
 module.exports = router;
