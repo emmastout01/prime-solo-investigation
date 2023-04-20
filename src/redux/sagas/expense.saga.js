@@ -29,10 +29,20 @@ function* deleteAllExpenses(action) {
   }
 }
 
+function* updateExpense(action) {
+  try {
+    yield axios.put(`/api/expenses/update/${action.payload.id}`, action.payload);
+    yield put({ type: 'FETCH_GROUP_CATEGORIES', payload: action.payload.budgetId})
+  } catch(error) {
+    console.log('Error in updateExpense saga:', error);
+  }
+}
+
 function* expenseSaga() {
   yield takeLatest('ADD_NEW_EXPENSE', addNewExpense);
   yield takeLatest('DELETE_EXPENSE', deleteExpense);
   yield takeLatest('DELETE_ALL_EXPENSES', deleteAllExpenses);
+  yield takeLatest('UPDATE_EXPENSE', updateExpense);
 }
 
 export default expenseSaga;
