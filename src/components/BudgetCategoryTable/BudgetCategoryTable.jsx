@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
+import { Grid, Stack } from "@mui/material";
 
 import "./BudgetCategoryTable.css";
 
@@ -38,29 +39,28 @@ const BudgetCategoryTable = ({ category }) => {
   const rows = category.expenses;
 
   return (
-    <div className="category">
-      <div className="flex-row">
+    <Grid item xs={6}>
+      <Stack direction="row" justifyContent="space-between" >
         <h3>{category.name}</h3>
         <h3>Budget Amount: {category.budgetAmount}</h3>
-
-        <Box sx={{ height: 400, width: "100%" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
+      </Stack>
+      <Box sx={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
               },
-            }}
-            pageSizeOptions={[5]}
-            checkboxSelection
-            disableRowSelectionOnClick
-          />
-        </Box>
-      </div>
-    </div>
+            },
+          }}
+          pageSizeOptions={[5]}
+          checkboxSelection
+          disableRowSelectionOnClick
+        />
+      </Box>
+    </Grid>
   );
 };
 
