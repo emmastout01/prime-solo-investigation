@@ -12,9 +12,11 @@ function* addNewExpense(action) {
 
 function* deleteExpense(action) {
   try {
-    yield action.payload.expenseIds.map(expense => {
-      axios.delete(`/api/expenses/${expense}`);
-    })
+    // yield action.payload.expenseIds.map(expense => {
+    //   axios.delete(`/api/expenses/${expense}`);
+    // })
+    // this is a delete request
+    yield axios.post(`/api/expenses/delete`, action.payload.expenseIds);
     yield put({ type: 'FETCH_GROUP_CATEGORIES', payload: action.payload.budgetId})
   } catch(error) {
     console.log('Error in deleteExpense saga:', error);
