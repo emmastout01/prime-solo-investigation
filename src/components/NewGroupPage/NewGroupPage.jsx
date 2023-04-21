@@ -21,16 +21,21 @@ const NewGroupPage = () => {
   const [income2, setIncome2] = useState(0);
   const [username, setUsername] = useState("");
   const [addedUser, setAddedUser] = useState("");
-  const [newCategory, setNewCategory] = useState({ name: "", budgetAmount: "" });
+  const [newCategory, setNewCategory] = useState({
+    name: "",
+    budgetAmount: "",
+  });
   const [categories, setCategories] = useState([
     { name: "Rent", budgetAmount: "" },
     { name: "Travel", budgetAmount: "" },
   ]);
   const [errorSnackOpen, setErrorSnackOpen] = React.useState(false);
   const [successSnackOpen, setSuccessSnackOpen] = React.useState(false);
+  const [userErrorSnackOpen, setUserErrorSnackOpen] = React.useState(false);
+  const [userSuccessSnackOpen, setUserSuccessSnackOpen] = React.useState(false);
 
   const clearAllState = () => {
-    setNewBudget({ name: "", totalBudget: 0 })
+    setNewBudget({ name: "", totalBudget: 0 });
     setIncome1(0);
     setIncome1(0);
     setUsername("");
@@ -39,8 +44,8 @@ const NewGroupPage = () => {
     setCategories([
       { name: "Rent", budgetAmount: "" },
       { name: "Travel", budgetAmount: "" },
-    ])
-  }
+    ]);
+  };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -49,12 +54,15 @@ const NewGroupPage = () => {
 
     setSuccessSnackOpen(false);
     setErrorSnackOpen(false);
+    setUserErrorSnackOpen(false);
+    setUserSuccessSnackOpen(false);
   };
 
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const currentGroup = useSelector((store) => store.currentGroup);
+  const allUsers = useSelector((store) => store.allUsers);
+  const currentUser = useSelector((store) => store.user);
 
   // console.log(newBudget);
   // console.log(categories);
@@ -80,8 +88,21 @@ const NewGroupPage = () => {
   };
 
   const saveUserInState = () => {
-    setAddedUser(username);
-    setUsername("");
+    let validated = false;
+    for (let user of allUsers) {
+      console.log(user);
+      if (user.username === username && user.username != currentUser.username) {
+        validated = true;
+      }
+    }
+
+    if (validated) {
+      setAddedUser(username);
+      setUsername("");
+      setUserSuccessSnackOpen(true);
+    } else {
+      setUserErrorSnackOpen(true);
+    }
   };
 
   const createNewGroup = () => {
@@ -102,6 +123,7 @@ const NewGroupPage = () => {
       setSuccessSnackOpen(true);
 
       // history.push(`groupDashboard/`);
+      clearAllState();
     } else {
       setErrorSnackOpen(true);
     }
@@ -224,14 +246,48 @@ const NewGroupPage = () => {
           Create Group
         </Button>
       </center>
-      <Snackbar open={errorSnackOpen} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-        Must provide group name, one income and add a user.
+      <Snackbar
+        open={errorSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={() => setErrorSnackOpen(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Must provide group name, one income and add a user.
         </Alert>
       </Snackbar>
-      <Snackbar open={successSnackOpen} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar
+        open={successSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           New Group Created!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={userErrorSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={() => setUserErrorSnackOpen(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          User does not exist!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={userSuccessSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          User added!
         </Alert>
       </Snackbar>
     </div>
