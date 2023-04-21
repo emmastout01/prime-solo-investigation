@@ -91,7 +91,7 @@ router.delete("/deleteByCategory/:id", (req, res) => {
 
 router.put("/update/:id", (req, res) => {
   const expenseToUpdate = req.body;
-  console.log('Req.body as expenseToUpdate', expenseToUpdate);
+  console.log("Req.body as expenseToUpdate", expenseToUpdate);
   let sqlText = ``;
 
   if (expenseToUpdate.columnToUpdate === "amount") {
@@ -107,7 +107,7 @@ router.put("/update/:id", (req, res) => {
       WHERE "id" = ($2)
     ;`;
   }
-  console.log('Sqltext after alteration', sqlText)
+  console.log("Sqltext after alteration", sqlText);
   pool
     .query(sqlText, [expenseToUpdate.value, expenseToUpdate.id])
     .then((result) => {
@@ -115,6 +115,27 @@ router.put("/update/:id", (req, res) => {
     })
     .catch((error) => {
       console.log("Update request for expense failed:", error);
+      res.sendStatus(500);
+    });
+});
+
+router.get("/allGroupExpenses/:id", (req, res) => {
+  const budgetId = req.params.id;
+  const sqlText = ` 
+    SELECT "expenses".id, "expenses".name AS "expenseName", "expenses".amount, "categories".name AS "categoryName", 
+    "user".username FROM "expenses"
+    JOIN "categories" ON "categories".id = "expenses"."categoryId"
+    JOIN "user" ON "user".id = "expenses"."userId"
+    WHERE "budget_id" = $1;
+  ;`;
+
+  pool
+    .query(sqlText, [budgetId])
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((error) => {
+      console.log("get request for /allGroupexpenses failed:", error);
       res.sendStatus(500);
     });
 });

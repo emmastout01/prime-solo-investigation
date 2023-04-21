@@ -15,6 +15,7 @@ function* deleteExpense(action) {
     // this is a delete request
     yield axios.post(`/api/expenses/delete`, action.payload.expenseIds);
     yield put({ type: 'FETCH_GROUP_CATEGORIES', payload: action.payload.budgetId})
+    yield put({ type: "FETCH_ALL_GROUP_EXPENSES", payload: action.payload.budgetId });
   } catch(error) {
     console.log('Error in deleteExpense saga:', error);
   }
@@ -33,6 +34,7 @@ function* updateExpense(action) {
   try {
     yield axios.put(`/api/expenses/update/${action.payload.id}`, action.payload);
     yield put({ type: 'FETCH_GROUP_CATEGORIES', payload: action.payload.budgetId})
+    yield put({ type: 'FETCH_ALL_GROUP_EXPENSES', payload: action.payload.budgetId})
   } catch(error) {
     console.log('Error in updateExpense saga:', error);
   }
@@ -40,7 +42,7 @@ function* updateExpense(action) {
 
 function* fetchAllgroupExpenses(action) {
   try {
-    const response = yield axios.get('/api/expenses/allGroupExpenses');
+    const response = yield axios.get(`/api/expenses/allGroupExpenses/${action.payload}`);
     yield put({ type: 'SET_ALL_GROUP_EXPENSES', payload: response.data });
   } catch (error) {
     console.log('Error in fetchAllGroupExpenses');

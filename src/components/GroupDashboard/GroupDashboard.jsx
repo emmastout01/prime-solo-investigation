@@ -21,6 +21,8 @@ const GroupDashboard = () => {
   useEffect(() => {
     currentGroup.id &&
       dispatch({ type: "FETCH_GROUP_CATEGORIES", payload: currentGroup.id });
+    currentGroup.id &&
+      dispatch({ type: "FETCH_ALL_GROUP_EXPENSES", payload: currentGroup.id });
     dispatch({ type: "FETCH_CURRENT_GROUP", payload: groupId });
   }, [currentGroup.id]);
 
@@ -33,9 +35,18 @@ const GroupDashboard = () => {
 
   return (
     <div className="main-wrapper">
-      <Stack direction="row" justifyContent="space-between" sx={{height: "40px", marginBottom: "40px"}}>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        sx={{ height: "40px", marginBottom: "40px" }}
+      >
         <h1>{currentGroup.name}</h1>
-        <Button variant="contained" onClick={() => history.push(`/allExpenses/${groupId.id}`)}>All Expenses</Button>
+        <Button
+          variant="contained"
+          onClick={() => history.push(`/allExpenses/${groupId.id}`)}
+        >
+          All Expenses
+        </Button>
       </Stack>
       {/* Display monthly income before tax */}
       {/* stretch: implement monthly take home based on taxes by state */}

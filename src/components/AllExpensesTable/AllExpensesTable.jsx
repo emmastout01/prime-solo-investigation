@@ -1,36 +1,50 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { Grid, Stack, Button, Box } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const AllExpensesTable = () => {
+  const groupId = useParams();
   const [selections, setSelections] = useState([]);
   const dispatch = useDispatch();
   const currentGroup = useSelector((store) => store.currentGroup);
+  const allExpenses = useSelector((store) => store.expenses);
+
+  useEffect(() => {
+    currentGroup.id &&
+      dispatch({ type: "FETCH_ALL_GROUP_EXPENSES", payload: currentGroup.id });
+      dispatch({ type: "FETCH_CURRENT_GROUP", payload: groupId });
+  }, [currentGroup.id]);
 
   const columns = [
     {
       field: "expenseName",
       headerName: "Expense",
-      width: 150,
+      width: 200,
       editable: true,
     },
     {
-      field: "expenseAmount",
+      field: "amount",
       headerName: "Amount",
-      width: 150,
+      width: 200,
       editable: true,
+    },
+    {
+      field: "categoryName",
+      headerName: "Category",
+      width: 200,
+      editable: false,
     },
     {
       field: "username",
       headerName: "User",
-      type: "number",
-      width: 110,
+      width: 200,
       editable: false,
     },
   ];
 
-  // const rows = category.expenses;
+  const rows = allExpenses;
 
   const handleDelete = () => {
     dispatch({
@@ -41,7 +55,7 @@ const AllExpensesTable = () => {
 
   const handleCellEditCommit = (params) => {
     let updatedExpenseObj = {};
-    if (params.field === "expenseAmount") {
+    if (params.field === "amount") {
       updatedExpenseObj.value = Number(params.value);
       updatedExpenseObj.columnToUpdate = "amount";
     } else if (params.field === "expenseName") {
@@ -65,12 +79,11 @@ const AllExpensesTable = () => {
 
   return (
     <div>
-      {/* <Grid item xs={6}>
+      <Grid item xs={6}>
         <Stack direction="row" justifyContent="space-between">
-          <h3>TEST NAME</h3>
-          <h3>Budget Amount: TEST AMOUNT</h3>
+          <h3>Budget Amount: {currentGroup.totalBudget}</h3>
         </Stack>
-        <Box sx={{ height: 400, width: "100%", marginBottom: "20px" }}>
+        <Box sx={{ height: 400, width: "60%", marginBottom: "20px" }}>
           <DataGrid
             rows={rows}
             columns={columns}
@@ -97,7 +110,7 @@ const AllExpensesTable = () => {
             </Button>
           )}
         </Stack>
-      </Grid> */}
+      </Grid>
     </div>
   );
 };
