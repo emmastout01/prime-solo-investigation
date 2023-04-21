@@ -75,7 +75,7 @@ const AllExpensesTable = () => {
         <Stack direction="row" justifyContent="space-between">
           <h3>Budget Amount: {currentGroup.totalBudget}</h3>
         </Stack>
-        <Box sx={{ height: 400, width: "60%", marginBottom: "20px" }}>
+        <Box sx={{ height: 400, width: "100%", marginBottom: "20px" }}>
           <DataGrid
             rows={rows}
             columns={columns}

@@ -11,7 +11,7 @@ import {
 import MuiAlert from "@mui/material/Alert";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -29,10 +29,15 @@ const UserProfile = () => {
   const [noSpacesSnackOpen, setNoSpacesSnackOpen] = useState(false);
   const [passwordMatchSnackOpen, setPasswordMatchSnackOpen] = useState(false);
   const [uniqueUsernameSnackOpen, setUniqueUsernameSnackOpen] = useState(false);
+  const [allUsersState, setAllUsersState] = useState();
 
   const currentUser = useSelector((store) => store.user);
-  const allUsers = useSelector(store => store.allUsers)
+  const allUsers = useSelector((store) => store.allUsers);
   const allGroups = useSelector((store) => store.groups);
+
+  useEffect(() => {
+    allUsers[0] && setAllUsersState(allUsers)
+  }, [allUsers])
 
   const dispatch = useDispatch();
 
@@ -53,8 +58,6 @@ const UserProfile = () => {
     setToggleEditForm(!toggleEditForm);
   };
 
-  console.log(updatedUserInfo);
-
   const handlePasswordChange = (key, e) => {
     e.target.value.includes(" ")
       ? setNoSpacesSnackOpen(true)
@@ -68,12 +71,15 @@ const UserProfile = () => {
   };
 
   const saveUpdatedUserDetails = () => {
-    let uniqueUsername;
-    for (let user of allUsers) {
-      if (user.username === updatedUserInfo.username && updatedUserInfo.username != currentUser.username) {
-        uniqueUsername = false;
-      } else {
-        uniqueUsername = true;
+    let uniqueUsername = true; // Set to true by default
+    for (let user of allUsersState) {
+      console.log('user',user.username);
+      if (
+        user.username === updatedUserInfo.username &&
+        updatedUserInfo.username !== currentUser.username
+      ) {
+        uniqueUsername = false; // Set to false if the condition is met
+        break; // Exit the loop early
       }
     }
 
@@ -82,14 +88,15 @@ const UserProfile = () => {
       updatedUserInfo.password &&
       updatedUserInfo.verifyPassword
     ) {
-      if (uniqueUsername) {
+      console.log(uniqueUsername);
+      if (uniqueUsername === true) {
         if (updatedUserInfo.password === updatedUserInfo.verifyPassword) {
-          dispatch({ type: 'UPDATE_USER_DETAILS' , payload: updatedUserInfo})
+          dispatch({ type: "UPDATE_USER_DETAILS", payload: updatedUserInfo });
           setUpdatedUserInfo({
             username: "",
             password: "",
             verifyPassword: "",
-          })
+          });
           setSuccessSnackOpen(true);
         } else {
           setPasswordMatchSnackOpen(true);
@@ -115,7 +122,9 @@ const UserProfile = () => {
               <EditIcon />
             </IconButton>
           </Stack>
-          <Avatar sx={{ height: 250, width: 250 }}>{currentUser.username[0]}</Avatar>
+          <Avatar sx={{ height: 250, width: 250 }}>
+            {currentUser.username[0]}
+          </Avatar>
           <h1>{currentUser.username}</h1>
           <Box>
             <h2>{currentUser.username}'s Groups</h2>
