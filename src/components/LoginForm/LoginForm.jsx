@@ -38,7 +38,6 @@ function LoginForm() {
           <TextField
             type="text"
             name="username"
-            id="outlined-basic"
             label="Username"
             variant="outlined"
             required
@@ -50,7 +49,6 @@ function LoginForm() {
           <TextField
             type="password"
             name="password"
-            id="outlined-basic"
             label="Password"
             variant="outlined"
             required

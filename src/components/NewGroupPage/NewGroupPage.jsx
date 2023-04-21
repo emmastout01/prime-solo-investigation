@@ -198,7 +198,6 @@ const NewGroupPage = () => {
           <div className="add-user-form">
             <TextField
               type="text"
-              id="outlined-basic"
               label="Username"
               variant="outlined"
               className="add-user-input"
@@ -227,12 +226,12 @@ const NewGroupPage = () => {
       </center>
       <Snackbar open={errorSnackOpen} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-          This is a success message!
+        Must provide group name, one income and add a user.
         </Alert>
       </Snackbar>
       <Snackbar open={successSnackOpen} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          This is a success message!
+          New Group Created!
         </Alert>
       </Snackbar>
     </div>
