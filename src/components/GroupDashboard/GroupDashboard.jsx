@@ -13,10 +13,7 @@ const GroupDashboard = () => {
   const dispatch = useDispatch();
 
   const categories = useSelector((store) => store.categories);
-  const allGroups = useSelector((store) => store.groups);
   const currentGroup = useSelector((store) => store.currentGroup)
-
-  const { id, name, totalBudget } = useSelector((store) => store.groups);
 
   // store specific budget and categories in global state based on groupId from url params
   useEffect(() => {
