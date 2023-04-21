@@ -38,11 +38,21 @@ function* updateExpense(action) {
   }
 }
 
+function* fetchAllgroupExpenses(action) {
+  try {
+    const response = yield axios.get('/api/expenses/allGroupExpenses');
+    yield put({ type: 'SET_ALL_GROUP_EXPENSES', payload: response.data });
+  } catch (error) {
+    console.log('Error in fetchAllGroupExpenses');
+  }
+}
+
 function* expenseSaga() {
   yield takeLatest('ADD_NEW_EXPENSE', addNewExpense);
   yield takeLatest('DELETE_EXPENSE', deleteExpense);
   yield takeLatest('DELETE_ALL_EXPENSES', deleteAllExpenses);
   yield takeLatest('UPDATE_EXPENSE', updateExpense);
+  yield takeLatest('FETCH_ALL_GROUP_EXPENSES', fetchAllgroupExpenses)
 }
 
 export default expenseSaga;

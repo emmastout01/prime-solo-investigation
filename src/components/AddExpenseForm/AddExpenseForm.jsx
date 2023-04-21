@@ -35,7 +35,7 @@ const AddExpenseForm = ({ categories, groupId }) => {
 
   return (
     <div>
-      <h3>Add Category</h3>
+      <h3>Add Expense</h3>
       <Stack direction="row" spacing={2} sx={{ marginBottom: "40px" }}>
         <FormControl>
           <InputLabel id="demo-simple-select-label">Category</InputLabel>

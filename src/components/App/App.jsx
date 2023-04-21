@@ -25,6 +25,7 @@ import SideBar from "../SideBar/SideBar";
 import NewGroupPage from "../NewGroupPage/NewGroupPage";
 import GroupDashboard from "../GroupDashboard/GroupDashboard";
 import UserProfile from "../UserProfile/UserProfile";
+import AllExpensesPage from "../AllExpensesPage/AllExpensesPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -82,6 +83,10 @@ function App() {
 
           <ProtectedRoute exact path='/profile'>
             <UserProfile />
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path='/allExpenses/:id'>
+            <AllExpensesPage />
           </ProtectedRoute>
 
           <Route exact path="/login">
