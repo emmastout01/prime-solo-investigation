@@ -3,9 +3,6 @@ import { put, takeLatest } from 'redux-saga/effects';
 
 function* createBudget(action) {
   try {
-    // post request creating budget
-    // console.log('Payload budget from saga', action.payload.budget)
-
     const response = yield axios.post('/api/group/createBudget', action.payload.budget);
     yield put({ type: 'CREATE_BUDGET', payload: {...action.payload.budget, id: response.data[0].id, username: action.payload.username}});
     yield put({ type: 'CREATE_CATEGORIES', payload:{id: response.data[0].id, categories: action.payload.categories}});
@@ -23,8 +20,8 @@ function* createGroup(action) {
     //action.payload.username is the name to add to group
     const groupIdResponse = yield axios.post('/api/group/createGroup', action.payload);
     const userToAddId = yield axios.get(`/api/group/user/${action.payload.username}`);
-    console.log('User id response', userToAddId.data)
-    console.log('Group id response:', groupIdResponse.data)
+    // console.log('User id response', userToAddId.data)
+    // console.log('Group id response:', groupIdResponse.data)
 
     yield put({ type: 'CREATE_USER_GROUP', payload: {groupId: groupIdResponse.data[0].id, userId: userToAddId.data[0].id }})
   } catch (error) {
@@ -34,7 +31,9 @@ function* createGroup(action) {
 
 function* createUserGroup(action) {
   try {
+    console.log('payload in creatUsergroup', action.payload)
     yield axios.post('/api/group/createUserGroup', action.payload);
+    yield put({ type: 'FETCH_ALL_GROUPS' });
   } catch (error) {
     console.log('Failure in create user group saga', error);
   }
@@ -54,11 +53,23 @@ function* createCategories(action) {
 
 function* fetchCurrentGroup(action) {
   try {
+    console.log('payload in fetchCurrentGroup',action.payload)
     const response = yield axios.get(`/api/group/currentGroup/${action.payload.id}`);
-    console.log(response.data)
+    console.log(response.data);
     yield put({ type: 'SET_CURRENT_GROUP', payload: response.data[0] });
   } catch (error) {
     console.log('failure in setCurrentGroup saga', error);
+  }
+}
+
+function* fetchAllGroups(action) {
+  try {
+    // get the groups the user belongs to 
+    const userGroupsResponse = yield axios.get('/api/group/userGroups');
+    // set the groups user belongs to
+    yield put({type: 'SET_USER_GROUPS', payload: userGroupsResponse.data});
+  } catch (error) {
+    console.log('failure in fetchAllGroups saga', error);
   }
 }
 
@@ -69,6 +80,7 @@ function* groupSaga() {
   yield takeLatest('CREATE_USER_GROUP', createUserGroup);
   yield takeLatest('CREATE_CATEGORIES', createCategories);
   yield takeLatest('FETCH_CURRENT_GROUP', fetchCurrentGroup);
+  yield takeLatest('FETCH_ALL_GROUPS', fetchAllGroups);
 }
 
 export default groupSaga

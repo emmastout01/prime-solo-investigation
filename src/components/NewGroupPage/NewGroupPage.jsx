@@ -1,7 +1,9 @@
-import { TextField, IconButton, Button } from "@mui/material";
+import * as React from "react";
+import { TextField, IconButton, Button, Stack, Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import "./NewGroupPage.css";
 
@@ -9,23 +11,50 @@ import "./NewGroupPage.css";
 // some info letting user know that budget line items are per month
 // check if username is exists in database, only let them add the person if it does
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const NewGroupPage = () => {
   const [newBudget, setNewBudget] = useState({ name: "", totalBudget: 0 });
   const [income1, setIncome1] = useState(0);
   const [income2, setIncome2] = useState(0);
   const [username, setUsername] = useState("");
   const [addedUser, setAddedUser] = useState("");
-  const [newCategory, setNewCategory] = useState({
-    name: "",
-    budgetAmount: "",
-  });
+  const [newCategory, setNewCategory] = useState({ name: "", budgetAmount: "" });
   const [categories, setCategories] = useState([
     { name: "Rent", budgetAmount: "" },
     { name: "Travel", budgetAmount: "" },
   ]);
+  const [errorSnackOpen, setErrorSnackOpen] = React.useState(false);
+  const [successSnackOpen, setSuccessSnackOpen] = React.useState(false);
+
+  const clearAllState = () => {
+    setNewBudget({ name: "", totalBudget: 0 })
+    setIncome1(0);
+    setIncome1(0);
+    setUsername("");
+    setAddedUser("");
+    setNewCategory({ name: "", budgetAmount: "" });
+    setCategories([
+      { name: "Rent", budgetAmount: "" },
+      { name: "Travel", budgetAmount: "" },
+    ])
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSuccessSnackOpen(false);
+    setErrorSnackOpen(false);
+  };
 
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const currentGroup = useSelector((store) => store.currentGroup);
 
   // console.log(newBudget);
   // console.log(categories);
@@ -57,17 +86,26 @@ const NewGroupPage = () => {
 
   const createNewGroup = () => {
     if (income1 && newBudget.name && addedUser) {
-      let newGroupObj = {budget: {...newBudget, totalBudget: Number(income1) + Number(income2)}, username: addedUser, categories: categories}
-      console.log('Payload:', newGroupObj);
-  
+      let newGroupObj = {
+        budget: {
+          ...newBudget,
+          totalBudget: Number(income1) + Number(income2),
+        },
+        username: addedUser,
+        categories: categories,
+      };
+      console.log("Payload:", newGroupObj);
+
       //Dispatch to create new group
-      dispatch({ type: 'CREATE_GROUP', payload: newGroupObj })
+      dispatch({ type: "CREATE_GROUP", payload: newGroupObj });
       // send to new group dashboard
-      history.push('/groupDashboard');
+      setSuccessSnackOpen(true);
+
+      // history.push(`groupDashboard/`);
     } else {
-      alert('Nope')
+      setErrorSnackOpen(true);
     }
-  }
+  };
 
   return (
     <div className="main-wrapper">
@@ -89,17 +127,13 @@ const NewGroupPage = () => {
               label="Income"
               variant="outlined"
               required
-              onChange={(e) =>
-                setIncome1(e.target.value)
-              }
+              onChange={(e) => setIncome1(e.target.value)}
             />
             <TextField
               type="Number"
               label="Income"
               variant="outlined"
-              onChange={(e) =>
-                setIncome2(e.target.value)
-              }
+              onChange={(e) => setIncome2(e.target.value)}
             />
           </div>
 
@@ -187,8 +221,20 @@ const NewGroupPage = () => {
         </div>
       </div>
       <center>
-        <Button variant="contained" onClick={createNewGroup}>Create Group</Button>
+        <Button variant="contained" onClick={createNewGroup}>
+          Create Group
+        </Button>
       </center>
+      <Snackbar open={errorSnackOpen} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          This is a success message!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={successSnackOpen} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          This is a success message!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
