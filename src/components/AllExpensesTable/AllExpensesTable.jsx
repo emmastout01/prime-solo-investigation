@@ -69,14 +69,6 @@ const AllExpensesTable = () => {
     dispatch({ type: "UPDATE_EXPENSE", payload: updatedExpenseObj });
   };
 
-  // const deleteCategory = () => {
-  //   const deleteCategoryObj = {
-  //     budgetId: currentGroup.id,
-  //     categoryId: category.id,
-  //   };
-  //   dispatch({ type: "DELETE_CATEGORY", payload: deleteCategoryObj });
-  // };
-
   return (
     <div>
       <Grid item xs={6}>
