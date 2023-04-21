@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import EditIcon from "@mui/icons-material/Edit";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -33,6 +33,8 @@ const UserProfile = () => {
   const currentUser = useSelector((store) => store.user);
   const allUsers = useSelector(store => store.allUsers)
   const allGroups = useSelector((store) => store.groups);
+
+  const dispatch = useDispatch();
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -82,12 +84,12 @@ const UserProfile = () => {
     ) {
       if (uniqueUsername) {
         if (updatedUserInfo.password === updatedUserInfo.verifyPassword) {
-          // dispatch({ type: 'UPDATE_USER_DETAILS' , payload: updatedUserInfo})
-          // setUpdatedUserInfo({
-          //   username: "",
-          //   password: "",
-          //   verifyPassword: "",
-          // })
+          dispatch({ type: 'UPDATE_USER_DETAILS' , payload: updatedUserInfo})
+          setUpdatedUserInfo({
+            username: "",
+            password: "",
+            verifyPassword: "",
+          })
           setSuccessSnackOpen(true);
         } else {
           setPasswordMatchSnackOpen(true);

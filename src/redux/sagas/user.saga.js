@@ -39,9 +39,10 @@ function* fetchAllUsers() {
   }
 }
 
-function* updateUserDetails() {
+function* updateUserDetails(action) {
   try {
-    
+    yield axios.put(`/api/user/updateUser/`, action.payload);
+    yield put({ type: 'FETCH_USER' });
   } catch (error) {
     console.log('Error in updateUserDetails saga', error);
   }
