@@ -7,6 +7,7 @@ import categories from './category.reducer';
 import expenses from './expenses.reducer';
 import currentGroup from './currentGroup.reducer';
 import allUsers from './allUsers.reducer';
+import categoryTotals from './categoryTotals.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
   categories,
   expenses,
   currentGroup,
-  allUsers
+  allUsers,
+  categoryTotals
 });
 
 export default rootReducer;
