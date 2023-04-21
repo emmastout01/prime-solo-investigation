@@ -44,7 +44,7 @@ const AddCategoryForm = ({ groupId, budgetId }) => {
 
   return (
     <div>
-      <h3>Add Expense</h3>
+      <h3>Add Category</h3>
       <Stack direction="row" spacing={2} sx={{ marginBottom: "40px" }}>
         <TextField
           type="text"

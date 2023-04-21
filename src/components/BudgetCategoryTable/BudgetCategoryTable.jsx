@@ -9,7 +9,7 @@ import "./BudgetCategoryTable.css";
 const BudgetCategoryTable = ({ category }) => {
   const [selections, setSelections] = useState([]);
   const dispatch = useDispatch();
-  const groupInfo = useSelector((store) => store.groups);
+  const currentGroup = useSelector((store) => store.currentGroup);
 
   const columns = [
     {
@@ -38,7 +38,7 @@ const BudgetCategoryTable = ({ category }) => {
   const handleDelete = () => {
     dispatch({
       type: "DELETE_EXPENSE",
-      payload: { expenseIds: selections, budgetId: groupInfo.id },
+      payload: { expenseIds: selections, budgetId: currentGroup.id },
     });
   };
 
@@ -51,7 +51,7 @@ const BudgetCategoryTable = ({ category }) => {
       updatedExpenseObj.value = params.value;
       updatedExpenseObj.columnToUpdate = "name";
     }
-    updatedExpenseObj.budgetId = groupInfo.id;
+    updatedExpenseObj.budgetId = currentGroup.id;
     updatedExpenseObj.id = params.id;
     // console.log(updatedExpenseObj);
 
@@ -59,7 +59,7 @@ const BudgetCategoryTable = ({ category }) => {
   };
 
   const deleteCategory = () => {
-    const deleteCategoryObj = {budgetId: groupInfo.id, categoryId: category.id}; 
+    const deleteCategoryObj = {budgetId: currentGroup.id, categoryId: category.id}; 
     dispatch({ type: 'DELETE_CATEGORY', payload: deleteCategoryObj })
   }
 
