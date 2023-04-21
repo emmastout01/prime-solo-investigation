@@ -1,3 +1,5 @@
+import * as React from "react";
+import MuiAlert from "@mui/material/Alert";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
@@ -8,7 +10,12 @@ import {
   MenuItem,
   Select,
   FormControl,
+  Snackbar,
 } from "@mui/material";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const AddExpenseForm = ({ categories, groupId }) => {
   const [newExpense, setNewExpense] = useState({
@@ -16,6 +23,8 @@ const AddExpenseForm = ({ categories, groupId }) => {
     categoryName: "",
     amount: "",
   });
+  const [errorSnackOpen, setErrorSnackOpen] = useState(false);
+  const [successSnackOpen, setSuccessSnackOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -28,9 +37,23 @@ const AddExpenseForm = ({ categories, groupId }) => {
   };
 
   const addExpense = () => {
-    let expensePayload = { ...newExpense, budgetId: groupId };
-    dispatch({ type: "ADD_NEW_EXPENSE", payload: expensePayload });
-    setNewExpense({ name: "", categoryName: "", amount: "" });
+    if (newExpense.name && newExpense.categoryName && newExpense.amount) {
+      let expensePayload = { ...newExpense, budgetId: groupId };
+      dispatch({ type: "ADD_NEW_EXPENSE", payload: expensePayload });
+      setNewExpense({ name: "", categoryName: "", amount: "" });
+      setSuccessSnackOpen(true);
+    } else {
+      setErrorSnackOpen(true);
+    }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSuccessSnackOpen(false);
+    setErrorSnackOpen(false);
   };
 
   return (
@@ -85,6 +108,25 @@ const AddExpenseForm = ({ categories, groupId }) => {
           Add Expense
         </Button>
       </Stack>
+
+      <Snackbar
+        open={errorSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={() => setErrorSnackOpen(false)} severity="error" sx={{ width: "100%" }}>
+          Must provide category, name of expense and amount.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={successSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          Expense added!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
