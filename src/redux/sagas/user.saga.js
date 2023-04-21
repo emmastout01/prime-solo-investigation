@@ -24,13 +24,24 @@ function* fetchUser() {
 
     // get the groups the user belongs to 
     yield put({ type: 'FETCH_ALL_GROUPS' })
+    yield put({ type: 'FETCH_ALL_USERS' })
   } catch (error) {
     console.log('User get request failed', error);
   }
 }
 
+function* fetchAllUsers() {
+  try {
+    const response = yield axios.get('/api/user/allUsers');
+    yield put({ type: 'SET_ALL_USERS', payload: response.data })
+  } catch (error) {
+    console.log('Error in fetchAllUsers saga', error)
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
+  yield takeLatest('FETCH_ALL_USERS', fetchAllUsers);
 }
 
 export default userSaga;

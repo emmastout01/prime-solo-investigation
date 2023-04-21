@@ -47,4 +47,18 @@ router.post('/logout', (req, res) => {
   res.sendStatus(200);
 });
 
+router.get('/allUsers', (req, res) => {
+  const sqlText = `SELECT "user".username FROM "user"`
+
+  pool
+    .query(sqlText)
+    .then(response => {
+      res.send(response.rows);
+    })
+    .catch(error => {
+      console.log('Error in /allUsers route', error);
+      res.sendStatus(500);
+    })
+})
+
 module.exports = router;
