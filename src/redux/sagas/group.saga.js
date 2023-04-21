@@ -36,7 +36,7 @@ function* createUserGroup(action) {
   try {
     yield axios.post('/api/group/createUserGroup', action.payload);
   } catch (error) {
-    console.log('User_group post request failed', error);
+    console.log('Failure in create user group saga', error);
   }
 }
 
@@ -48,7 +48,17 @@ function* createCategories(action) {
       axios.post('/api/group/createCategories', {category, id: action.payload.id});
     })
   } catch (error) {
-    console.log('User_group post request failed', error);
+    console.log('Failure in createCategories saga', error);
+  }
+}
+
+function* fetchCurrentGroup(action) {
+  try {
+    const response = yield axios.get(`/api/group/currentGroup/${action.payload.id}`);
+    console.log(response.data)
+    yield put({ type: 'SET_CURRENT_GROUP', payload: response.data[0] });
+  } catch (error) {
+    console.log('failure in setCurrentGroup saga', error);
   }
 }
 
@@ -58,6 +68,7 @@ function* groupSaga() {
   yield takeLatest('CREATE_BUDGET', createGroup);
   yield takeLatest('CREATE_USER_GROUP', createUserGroup);
   yield takeLatest('CREATE_CATEGORIES', createCategories);
+  yield takeLatest('FETCH_CURRENT_GROUP', fetchCurrentGroup);
 }
 
 export default groupSaga

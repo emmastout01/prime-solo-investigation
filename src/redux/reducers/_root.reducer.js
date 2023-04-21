@@ -4,7 +4,8 @@ import user from './user.reducer';
 import groups from './group.reducer';
 // import budgetItems from './budget.reducer';
 import categories from './category.reducer';
-import expenses from './expenses.reducer'
+import expenses from './expenses.reducer';
+import currentGroup from './currentGroup.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   user, // will have an id and username if someone is logged in
   groups,
   categories,
-  expenses
+  expenses,
+  currentGroup
 });
 
 export default rootReducer;

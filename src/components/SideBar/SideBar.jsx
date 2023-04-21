@@ -151,13 +151,19 @@ const SideBar = () => {
                   <ListItemText primary={"About"} />
                 </ListItemButton>
               </ListItem>
-              
-              <ListItem disablePadding>
-                <ListItemButton onClick={() => history.push(`/groupDashboard/${groups.groupId}`)}>
-                  {/* change name to reflect name of group */}
-                  <ListItemText primary={groups.name} />
-                </ListItemButton>
-              </ListItem>
+
+              {groups[0] &&
+                groups.map((group) => (
+                  <ListItem disablePadding key={group.id}>
+                    <ListItemButton
+                      onClick={() =>
+                        history.push(`/groupDashboard/${group.groupId}`)
+                      }
+                    >
+                      <ListItemText primary={group.name} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
 
               <ListItem disablePadding>
                 <ListItemButton onClick={() => history.push("/newGroup")}>
@@ -174,7 +180,7 @@ const SideBar = () => {
               </ListItem>
 
               <ListItem disablePadding>
-                <ListItemButton onClick={() => dispatch({type: 'LOGOUT' })}>
+                <ListItemButton onClick={() => dispatch({ type: "LOGOUT" })}>
                   <ListItemText primary={"Logout"} />
                 </ListItemButton>
               </ListItem>

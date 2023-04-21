@@ -26,7 +26,7 @@ function* fetchUser() {
     const userGroupsResponse = yield axios.get('/api/group/userGroups');
 
     // set the groups user belongs to
-    yield put({type: 'SET_USER_GROUPS', payload: userGroupsResponse.data[0]});
+    yield put({type: 'SET_USER_GROUPS', payload: userGroupsResponse.data});
   } catch (error) {
     console.log('User get request failed', error);
   }

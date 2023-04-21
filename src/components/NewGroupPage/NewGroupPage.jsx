@@ -56,13 +56,17 @@ const NewGroupPage = () => {
   };
 
   const createNewGroup = () => {
-    let newGroupObj = {budget: {...newBudget, totalBudget: Number(income1) + Number(income2)}, username: addedUser, categories: categories}
-    console.log('Payload:', newGroupObj);
-
-    //Dispatch to create new group
-    dispatch({ type: 'CREATE_GROUP', payload: newGroupObj })
-    // send to new group dashboard
-    history.push('/groupDashboard');
+    if (income1 && newBudget.name && addedUser) {
+      let newGroupObj = {budget: {...newBudget, totalBudget: Number(income1) + Number(income2)}, username: addedUser, categories: categories}
+      console.log('Payload:', newGroupObj);
+  
+      //Dispatch to create new group
+      dispatch({ type: 'CREATE_GROUP', payload: newGroupObj })
+      // send to new group dashboard
+      history.push('/groupDashboard');
+    } else {
+      alert('Nope')
+    }
   }
 
   return (

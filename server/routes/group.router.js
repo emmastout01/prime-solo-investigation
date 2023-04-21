@@ -5,6 +5,30 @@ const {
   rejectUnauthenticated,
 } = require("../modules/authentication-middleware");
 
+router.get("/currentGroup/:id", rejectUnauthenticated, (req, res) => {
+  const userId = req.user.id;
+  const groupId = req.params.id;
+
+  const sqlText = `
+    SELECT "user".id, "user".username, "groups".id AS "groupId", "groups".name, "budget".id, "budget"."totalBudget" FROM "user_groups"
+    JOIN "user" ON "user".id = user_groups."userId"
+    JOIN "groups" ON "groups".id = user_groups."groupsId"
+    JOIN "budget" ON "budget".id = "groups"."budgetId"
+    WHERE "user".id = $1 AND "groups".id = $2;
+  `;
+
+  pool
+    .query(sqlText, [userId, groupId])
+    .then((result) => {
+      // console.log(result.rows)
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log("User registration failed: ", err);
+      res.sendStatus(500);
+    });
+});
+
 // GET route
 router.get("/user/:username", (req, res) => {
   const username = req.params.username;
@@ -105,20 +129,6 @@ router.post("/createCategories", (req, res) => {
   let budgetId = req.body.id;
   const queryText = `INSERT INTO "categories" ("name", "budgetAmount", "budgetId")
   VALUES ($1, $2, $3);`;
-
-  // first try
-
-  // categories.map(category => {
-  //   pool
-  //   .query(queryText, [category.name, category.budgetAmount, budgetId])
-  //   .then((result) => {
-  //     res.sendStatus(201);
-  //   })
-  //   .catch((err) => {
-  //     console.log("Category creation failed: ", err);
-  //     res.sendStatus(500);
-  //   });
-  // })
 
   pool
     .query(queryText, [category.name, category.budgetAmount, budgetId])
