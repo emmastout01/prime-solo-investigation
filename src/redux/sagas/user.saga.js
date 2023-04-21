@@ -39,9 +39,18 @@ function* fetchAllUsers() {
   }
 }
 
+function* updateUserDetails() {
+  try {
+    
+  } catch (error) {
+    console.log('Error in updateUserDetails saga', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('FETCH_ALL_USERS', fetchAllUsers);
+  yield takeLatest('UPDATE_USER_DETAILS', updateUserDetails);
 }
 
 export default userSaga;

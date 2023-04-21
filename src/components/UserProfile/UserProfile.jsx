@@ -1,21 +1,228 @@
-import { Avatar, Stack, Box } from "@mui/material";
+import * as React from "react";
+import {
+  Avatar,
+  Stack,
+  Box,
+  IconButton,
+  TextField,
+  Snackbar,
+  Button,
+} from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
+import EditIcon from "@mui/icons-material/Edit";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const UserProfile = () => {
-  const user = useSelector((store) => store.user);
-  const groupInfo = useSelector((store) => store.groups);
+  const [toggleEditForm, setToggleEditForm] = useState(false);
+  const [updatedUserInfo, setUpdatedUserInfo] = useState({
+    username: "",
+    password: "",
+    verifyPassword: "",
+  });
+  const [allFieldsSnackOpen, setAllFieldsSnackOpen] = useState(false);
+  const [successSnackOpen, setSuccessSnackOpen] = useState(false);
+  const [noSpacesSnackOpen, setNoSpacesSnackOpen] = useState(false);
+  const [passwordMatchSnackOpen, setPasswordMatchSnackOpen] = useState(false);
+  const [uniqueUsernameSnackOpen, setUniqueUsernameSnackOpen] = useState(false);
+
+  const currentUser = useSelector((store) => store.user);
+  const allUsers = useSelector(store => store.allUsers)
+  const allGroups = useSelector((store) => store.groups);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSuccessSnackOpen(false);
+    setNoSpacesSnackOpen(false);
+    setAllFieldsSnackOpen(false);
+    setPasswordMatchSnackOpen(false);
+    setUniqueUsernameSnackOpen(false);
+  };
+
+  const handleEditClick = () => {
+    setUpdatedUserInfo({ ...updatedUserInfo, username: currentUser.username });
+    setToggleEditForm(!toggleEditForm);
+  };
+
+  console.log(updatedUserInfo);
+
+  const handlePasswordChange = (key, e) => {
+    e.target.value.includes(" ")
+      ? setNoSpacesSnackOpen(true)
+      : setUpdatedUserInfo({ ...updatedUserInfo, [key]: e.target.value });
+  };
+
+  const handleUserNameChange = (e) => {
+    e.target.value.includes(" ")
+      ? setNoSpacesSnackOpen(true)
+      : setUpdatedUserInfo({ ...updatedUserInfo, username: e.target.value });
+  };
+
+  const saveUpdatedUserDetails = () => {
+    let uniqueUsername;
+    for (let user of allUsers) {
+      if (user.username === updatedUserInfo.username && updatedUserInfo.username != currentUser.username) {
+        uniqueUsername = false;
+      } else {
+        uniqueUsername = true;
+      }
+    }
+
+    if (
+      updatedUserInfo.username &&
+      updatedUserInfo.password &&
+      updatedUserInfo.verifyPassword
+    ) {
+      if (uniqueUsername) {
+        if (updatedUserInfo.password === updatedUserInfo.verifyPassword) {
+          // dispatch({ type: 'UPDATE_USER_DETAILS' , payload: updatedUserInfo})
+          // setUpdatedUserInfo({
+          //   username: "",
+          //   password: "",
+          //   verifyPassword: "",
+          // })
+          setSuccessSnackOpen(true);
+        } else {
+          setPasswordMatchSnackOpen(true);
+        }
+      } else {
+        setUniqueUsernameSnackOpen(true);
+      }
+    } else {
+      setAllFieldsSnackOpen(true);
+    }
+  };
 
   return (
     <div className="main-wrapper">
-      <Stack direction="column" alignItems="center">
-        <Avatar sx={{ height: 250, width: 250 }}>{user.username[0]}</Avatar>
-        <h1>{user.username}</h1>
-        <Box>
-          <h2>{user.username}'s Groups</h2>
-          {/* will need to change later to show multiple groups */}
-          <p>{groupInfo.name}</p>
-        </Box>
+      <Stack direction="row" justifyContent="center" alignItems="center">
+        <Stack direction="column" alignItems="center" sx={{ width: "50%" }}>
+          <Stack
+            direction="row"
+            justifyContent="flex-end"
+            sx={{ width: "100%" }}
+          >
+            <IconButton onClick={handleEditClick} aria-label="edit">
+              <EditIcon />
+            </IconButton>
+          </Stack>
+          <Avatar sx={{ height: 250, width: 250 }}>{currentUser.username[0]}</Avatar>
+          <h1>{currentUser.username}</h1>
+          <Box>
+            <h2>{currentUser.username}'s Groups</h2>
+            {allGroups[0] &&
+              allGroups.map((group) => <p key={group.name}>{group.name}</p>)}
+          </Box>
+        </Stack>
+
+        {toggleEditForm ? (
+          <div>
+            <Stack
+              direction="column"
+              alignItems="center"
+              sx={{ width: "100%" }}
+              gap="20px"
+            >
+              <h3>Edit Profile</h3>
+              <TextField
+                type="text"
+                label="New Username"
+                variant="outlined"
+                value={updatedUserInfo.username}
+                onChange={(e) => handleUserNameChange(e)}
+              />
+              <TextField
+                type="text"
+                label="New Password"
+                variant="outlined"
+                value={updatedUserInfo.password}
+                onChange={(e) => handlePasswordChange("password", e)}
+              />
+              <TextField
+                type="text"
+                label="Verify Password"
+                variant="outlined"
+                value={updatedUserInfo.verifyPassword}
+                onChange={(e) => handlePasswordChange("verifyPassword", e)}
+              />
+              <Button variant="contained" onClick={saveUpdatedUserDetails}>
+                Save
+              </Button>
+            </Stack>
+          </div>
+        ) : (
+          <></>
+        )}
       </Stack>
+
+      <Snackbar
+        open={noSpacesSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={() => setNoSpacesSnackOpen(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          No Spaces!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={uniqueUsernameSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={() => setUniqueUsernameSnackOpen(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Username taken.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={allFieldsSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={() => setAllFieldsSnackOpen(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Please fill out all fields.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={passwordMatchSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={() => setPasswordMatchSnackOpen(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Passwords do not match.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={successSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          Updated username and password!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
