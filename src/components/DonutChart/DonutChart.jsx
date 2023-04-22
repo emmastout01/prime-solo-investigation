@@ -51,13 +51,6 @@ const DonutChart = ({}) => {
     randomColors.push(color);
   }
 
-  for (let category of categoryTotals) {
-    const randomColor = getRandomColor();
-    categoriesArray.push(category.name);
-    categoriesTotalArray.push(category.expenseTotal);
-    randomColors.push(randomColor);
-  }
-
   console.log("randomColors:", randomColors);
   console.log(categoriesArray, categoriesTotalArray);
 
