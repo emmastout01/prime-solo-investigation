@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Button, Typography } from '@mui/material';
 import './LandingPage.css';
 
 // CUSTOM COMPONENTS
@@ -14,7 +15,7 @@ function LandingPage() {
   };
 
   return (
-    <div className="container">
+    <div className="wrapper-top-margin">
       <h2>{heading}</h2>
 
       <div className="grid">
@@ -55,10 +56,8 @@ function LandingPage() {
           <RegisterForm />
 
           <center>
-            <h4>Already a Member?</h4>
-            <button className="btn btn_sizeSm" onClick={onLogin}>
-              Login
-            </button>
+            <Typography variant='h5' sx={{marginBottom: "20px"}}>Already a Member?</Typography>
+            <Button variant='contained' onClick={onLogin}>Login</Button>
           </center>
         </div>
       </div>

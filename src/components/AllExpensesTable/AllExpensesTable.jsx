@@ -100,7 +100,7 @@ const AllExpensesTable = () => {
         </Box>
         <Stack direction="row" justifyContent="space-between">
           {selections[0] && (
-            <Button variant="contained" onClick={handleDelete}>
+            <Button variant="contained" onClick={handleDelete} color="error">
               Delete
             </Button>
           )}

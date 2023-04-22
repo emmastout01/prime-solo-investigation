@@ -93,11 +93,11 @@ const BudgetCategoryTable = ({ category }) => {
       </Box>
       <Stack direction="row" justifyContent="space-between">
         {selections[0] && (
-          <Button variant="contained" onClick={handleDelete}>
+          <Button variant="contained" onClick={handleDelete} color="error">
             Delete
           </Button>
         )}
-        <Button variant="contained" onClick={deleteCategory}>Delete Category</Button>
+        <Button variant="contained" onClick={deleteCategory} color="error">Delete Category</Button>
       </Stack>
     </Grid>
   );

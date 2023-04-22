@@ -101,7 +101,7 @@ const SideBar = () => {
 
           <div className="links">
             <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
-              <Typography variant="h6" noWrap component="div">
+              <Typography variant="h5" noWrap component="div">
                 Budget App
               </Typography>
             </Link>
