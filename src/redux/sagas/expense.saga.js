@@ -16,7 +16,6 @@ function* deleteExpense(action) {
     yield axios.post(`/api/expenses/delete`, action.payload.expenseIds);
     yield put({ type: 'FETCH_GROUP_CATEGORIES', payload: action.payload.budgetId })
     yield put({ type: "FETCH_ALL_GROUP_EXPENSES", payload: action.payload.budgetId });
-    yield put({ type: "FETCH_CATEGORY_TOTALS", payload: action.payload.budgetId })
   } catch(error) {
     console.log('Error in deleteExpense saga:', error);
   }

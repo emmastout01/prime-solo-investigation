@@ -52,6 +52,7 @@ const AllExpensesTable = () => {
       type: "DELETE_EXPENSE",
       payload: { expenseIds: selections, budgetId: currentGroup.id },
     });
+    dispatch({ type: "FETCH_CATEGORY_TOTALS", payload: currentGroup.id });
   };
 
   const handleCellEditCommit = (params) => {
@@ -68,6 +69,7 @@ const AllExpensesTable = () => {
     // console.log(updatedExpenseObj);
 
     dispatch({ type: "UPDATE_EXPENSE", payload: updatedExpenseObj });
+    dispatch({ type: "FETCH_CATEGORY_TOTALS", payload: currentGroup.id });
   };
 
   return (
