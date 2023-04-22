@@ -7,8 +7,6 @@ const router = express.Router();
  */
 router.get("/:id", (req, res) => {
   const budgetId = req.params.id;
-  console.log("budgetId in category get request:", budgetId);
-  // console.log("in expenses get request, budgetid:", budgetId);
 
   const sqlText = `
     SELECT "categories".id, "categories".name, "categories"."budgetAmount",
@@ -38,7 +36,28 @@ router.get("/:id", (req, res) => {
       res.send(result.rows);
     })
     .catch((err) => {
-      console.log("Post request for new expense failed: ", err);
+      console.log("Get request for categories failed: ", err);
+      res.sendStatus(500);
+    });
+});
+
+router.get("/categoryTotals/:id", (req, res) => {
+  const budgetId = req.params.id;
+
+  const sqlText = `
+    SELECT "categories".name, sum("expenses".amount) AS "expenseTotal" FROM "categories"
+    JOIN "expenses" ON "expenses"."categoryId" = "categories".id
+    WHERE "expenses".budget_id = $1
+    GROUP BY "categories".name
+  `;
+
+  pool
+    .query(sqlText, [budgetId])
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log("Get request for /categoryTotals failed: ", err);
       res.sendStatus(500);
     });
 });

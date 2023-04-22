@@ -33,6 +33,8 @@ const NewGroupPage = () => {
   const [successSnackOpen, setSuccessSnackOpen] = React.useState(false);
   const [userErrorSnackOpen, setUserErrorSnackOpen] = React.useState(false);
   const [userSuccessSnackOpen, setUserSuccessSnackOpen] = React.useState(false);
+  const [categorySuccessSnackOpen, setCategorySuccessSnackOpen] = React.useState(false);
+  const [categoryErrorSnackOpen, setCategoryErrorSnackOpen] = React.useState(false);
 
   const clearAllState = () => {
     setNewBudget({ name: "", totalBudget: 0 });
@@ -56,6 +58,8 @@ const NewGroupPage = () => {
     setErrorSnackOpen(false);
     setUserErrorSnackOpen(false);
     setUserSuccessSnackOpen(false);
+    setCategoryErrorSnackOpen(false);
+    setCategorySuccessSnackOpen(false);
   };
 
   const dispatch = useDispatch();
@@ -76,8 +80,13 @@ const NewGroupPage = () => {
   };
 
   const addCategory = () => {
-    setCategories([...categories, newCategory]);
-    setNewCategory({ name: "", budgetAmount: "" });
+    if (newCategory.name && newCategory.budgetAmount) {
+      setCategories([...categories, newCategory]);
+      setNewCategory({ name: "", budgetAmount: "" });
+      setCategorySuccessSnackOpen(true);
+    } else { 
+      setCategoryErrorSnackOpen(true);
+    }
   };
 
   const removeCategory = (i) => {
@@ -288,6 +297,24 @@ const NewGroupPage = () => {
       >
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           User added!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={categorySuccessSnackOpen}
+        autoHideDuration={6000}
+        onClose={() => setCategorySuccessSnackOpen(false)}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          Category Added!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={categoryErrorSnackOpen}
+        autoHideDuration={6000}
+        onClose={() => setCategoryErrorSnackOpen(false)}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Please fill out all fields.
         </Alert>
       </Snackbar>
     </div>

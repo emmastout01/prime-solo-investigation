@@ -33,10 +33,20 @@ function* deleteCategory(action) {
    }
 }
 
+function* fetchCategoryTotals(action) {
+   try {
+    const response = yield axios.get(`/api/categories/categoryTotals/${action.payload}`);
+    yield put({ type: 'SET_CATEGORY_TOTALS', payload: response.data })
+   } catch (error) {
+    console.log('Error in deleteCategory saga', error)
+   }
+}
+
 function* categorySaga() {
   yield takeLatest('ADD_NEW_CATEGORY', addNewCategory);
   yield takeLatest('FETCH_GROUP_CATEGORIES', fetchGroupCategories);
   yield takeLatest('DELETE_CATEGORY', deleteCategory);
+  yield takeLatest('FETCH_CATEGORY_TOTALS', fetchCategoryTotals);
 }
 
 export default categorySaga;

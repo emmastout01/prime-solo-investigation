@@ -23,6 +23,8 @@ const GroupDashboard = () => {
       dispatch({ type: "FETCH_GROUP_CATEGORIES", payload: currentGroup.id });
     currentGroup.id &&
       dispatch({ type: "FETCH_ALL_GROUP_EXPENSES", payload: currentGroup.id });
+    currentGroup.id &&
+      dispatch({ type: "FETCH_CATEGORY_TOTALS", payload: currentGroup.id });
     dispatch({ type: "FETCH_CURRENT_GROUP", payload: groupId });
   }, [currentGroup.id]);
 

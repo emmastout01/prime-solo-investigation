@@ -8,6 +8,7 @@ const AllExpensesTable = () => {
   const groupId = useParams();
   const [selections, setSelections] = useState([]);
   const dispatch = useDispatch();
+
   const currentGroup = useSelector((store) => store.currentGroup);
   const allExpenses = useSelector((store) => store.expenses);
 
@@ -51,6 +52,7 @@ const AllExpensesTable = () => {
       type: "DELETE_EXPENSE",
       payload: { expenseIds: selections, budgetId: currentGroup.id },
     });
+    dispatch({ type: "FETCH_CATEGORY_TOTALS", payload: currentGroup.id });
   };
 
   const handleCellEditCommit = (params) => {
@@ -67,6 +69,7 @@ const AllExpensesTable = () => {
     // console.log(updatedExpenseObj);
 
     dispatch({ type: "UPDATE_EXPENSE", payload: updatedExpenseObj });
+    dispatch({ type: "FETCH_CATEGORY_TOTALS", payload: currentGroup.id });
   };
 
   return (
@@ -75,7 +78,7 @@ const AllExpensesTable = () => {
         <Stack direction="row" justifyContent="space-between">
           <h3>Budget Amount: {currentGroup.totalBudget}</h3>
         </Stack>
-        <Box sx={{ height: 400, width: "100%", marginBottom: "20px" }}>
+        <Box sx={{height: "900px", width: "100%", marginBottom: "20px" }}>
           <DataGrid
             rows={rows}
             columns={columns}
