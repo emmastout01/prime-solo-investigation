@@ -101,7 +101,7 @@ const AddExpenseForm = ({ categories, groupId }) => {
           variant="outlined"
           value={newExpense.amount}
           onChange={(e) =>
-            setNewExpense({ ...newExpense, amount: Number(e.target.value) })
+            setNewExpense({ ...newExpense, amount: e.target.value })
           }
         />
         <Button variant="contained" onClick={addExpense}>

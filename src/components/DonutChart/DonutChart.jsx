@@ -1,17 +1,65 @@
 import { Chart } from "chart.js/auto";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Stack } from "@mui/material";
 
-const DonutChart = ({ categoryTotals }) => {
+const DonutChart = ({}) => {
+  const groupId = useParams();
   const categoriesArray = [];
   const categoriesTotalArray = [];
+  const randomColors = [];
+  const [chartGenerated, setChartGenerated] = useState(false);
 
-  for (let category of categoryTotals) {
-    categoriesArray.push(category.name);
-    categoriesTotalArray.push(category.expenseTotal);
+  const dispatch = useDispatch();
+
+  const currentGroup = useSelector((store) => store.currentGroup);
+  const categoryTotals = useSelector((store) => store.categoryTotals);
+
+  useEffect(() => {
+    if (!chartGenerated && currentGroup.id) {
+      dispatch({ type: "FETCH_CATEGORY_TOTALS", payload: currentGroup.id });
+      dispatch({ type: "FETCH_CURRENT_GROUP", payload: groupId });
+    }
+  }, [chartGenerated, currentGroup.id]);
+
+  useEffect(() => {
+    if (categoryTotals.length && currentGroup.id && !chartGenerated) {
+      for (let category of categoryTotals) {
+        const randomColor = getRandomColor();
+        categoriesArray.push(category.name);
+        categoriesTotalArray.push(category.expenseTotal);
+        randomColors.push(randomColor);
+      }
+      makeDonutChart();
+      setChartGenerated(true);
+    }
+  }, [categoryTotals, currentGroup.id, chartGenerated]);
+
+  function getRandomColor() {
+    var letters = "0123456789ABCDEF".split("");
+    var color = "#";
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 
-  console.log(categoriesArray, categoriesTotalArray);  
+  for (let i = 0; i < categoriesArray.length; i++) {
+    let color = getRandomColor();
+    randomColors.push(color);
+  }
+
+  for (let category of categoryTotals) {
+    const randomColor = getRandomColor();
+    categoriesArray.push(category.name);
+    categoriesTotalArray.push(category.expenseTotal);
+    randomColors.push(randomColor);
+  }
+
+  console.log("randomColors:", randomColors);
+  console.log(categoriesArray, categoriesTotalArray);
 
   const makeDonutChart = () => {
     (async function () {
@@ -19,13 +67,9 @@ const DonutChart = ({ categoryTotals }) => {
         labels: categoriesArray,
         datasets: [
           {
-            label: "My First Dataset",
+            label: "Amount",
             data: categoriesTotalArray,
-            backgroundColor: [
-              "rgb(255, 99, 132)",
-              "rgb(54, 162, 235)",
-              "rgb(255, 205, 86)",
-            ],
+            backgroundColor: randomColors,
             hoverOffset: 4,
           },
         ],
@@ -42,7 +86,7 @@ const DonutChart = ({ categoryTotals }) => {
             },
             title: {
               display: true,
-              text: "Chart.js Doughnut Chart",
+              text: "Categories",
             },
           },
         },
@@ -50,17 +94,7 @@ const DonutChart = ({ categoryTotals }) => {
     })();
   };
 
-  useEffect(() => {
-    makeDonutChart();
-  }, [])
-
-  return (
-    <div>
-      <div className="container3">
-        <canvas id="donut"></canvas>
-      </div>
-    </div>
-  );
+  return <canvas id="donut"></canvas>;
 };
 
 export default DonutChart;
