@@ -1,5 +1,12 @@
 import * as React from "react";
-import { TextField, IconButton, Button, Stack, Snackbar } from "@mui/material";
+import {
+  TextField,
+  IconButton,
+  Button,
+  Stack,
+  Snackbar,
+  Autocomplete,
+} from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect } from "react";
@@ -33,8 +40,10 @@ const NewGroupPage = () => {
   const [successSnackOpen, setSuccessSnackOpen] = React.useState(false);
   const [userErrorSnackOpen, setUserErrorSnackOpen] = React.useState(false);
   const [userSuccessSnackOpen, setUserSuccessSnackOpen] = React.useState(false);
-  const [categorySuccessSnackOpen, setCategorySuccessSnackOpen] = React.useState(false);
-  const [categoryErrorSnackOpen, setCategoryErrorSnackOpen] = React.useState(false);
+  const [categorySuccessSnackOpen, setCategorySuccessSnackOpen] =
+    React.useState(false);
+  const [categoryErrorSnackOpen, setCategoryErrorSnackOpen] =
+    React.useState(false);
 
   const clearAllState = () => {
     setNewBudget({ name: "", totalBudget: 0 });
@@ -84,7 +93,7 @@ const NewGroupPage = () => {
       setCategories([...categories, newCategory]);
       setNewCategory({ name: "", budgetAmount: "" });
       setCategorySuccessSnackOpen(true);
-    } else { 
+    } else {
       setCategoryErrorSnackOpen(true);
     }
   };
@@ -99,7 +108,8 @@ const NewGroupPage = () => {
   const saveUserInState = () => {
     let validated = false;
     for (let user of allUsers) {
-      console.log(user);
+      console.log("user in state:", user.username);
+      console.log("username to add:", username);
       if (user.username === username && user.username != currentUser.username) {
         validated = true;
       }
@@ -227,7 +237,7 @@ const NewGroupPage = () => {
         <div className="add-user">
           <h1 className="add-user-header">Add User to Group</h1>
           <div className="add-user-form">
-            <TextField
+            {/* <TextField
               type="text"
               label="Username"
               variant="outlined"
@@ -235,6 +245,21 @@ const NewGroupPage = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
+            /> */}
+
+            <Autocomplete
+              id="free-solo-demo"
+              options={allUsers.filter(user => user.username != currentUser.username).map((user) => user.username)}
+              sx={{ width: "100%" }}
+              onSelect={(e) => setUsername(e.target.value)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Add user"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              )}
             />
             <Button
               variant="contained"
