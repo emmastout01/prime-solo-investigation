@@ -59,9 +59,12 @@ const BudgetCategoryTable = ({ category }) => {
   };
 
   const deleteCategory = () => {
-    const deleteCategoryObj = {budgetId: currentGroup.id, categoryId: category.id}; 
-    dispatch({ type: 'DELETE_CATEGORY', payload: deleteCategoryObj })
-  }
+    const deleteCategoryObj = {
+      budgetId: currentGroup.id,
+      categoryId: category.id,
+    };
+    dispatch({ type: "DELETE_CATEGORY", payload: deleteCategoryObj });
+  };
 
   // console.log("newSelections:", selections);
 
@@ -69,7 +72,7 @@ const BudgetCategoryTable = ({ category }) => {
     <Grid item xs={6}>
       <Stack direction="row" justifyContent="space-between">
         <h3>{category.name}</h3>
-        <h3>Budget Amount: {category.budgetAmount}</h3>
+        <h3>Target Budget Amount: {category.budgetAmount}</h3>
       </Stack>
       <Box sx={{ height: 400, width: "100%", marginBottom: "20px" }}>
         <DataGrid
@@ -97,7 +100,12 @@ const BudgetCategoryTable = ({ category }) => {
             Delete
           </Button>
         )}
-        <Button variant="contained" onClick={deleteCategory} color="error">Delete Category</Button>
+
+        <Stack direction="row" justifyContent="flex-end" sx={{width: "100%"}}>
+          <Button variant="contained" onClick={deleteCategory} color="error">
+            Delete Category
+          </Button>
+        </Stack>
       </Stack>
     </Grid>
   );

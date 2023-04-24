@@ -36,7 +36,7 @@ function Nav() {
     //       </>
     //     )} */}
     //   </div>
-    <AppBar position="fixed" open={open}>
+    <AppBar position="fixed">
       <Toolbar>
         <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
           <Typography variant="h5" noWrap component="div">
