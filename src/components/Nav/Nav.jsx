@@ -44,7 +44,7 @@ function Nav({ darkModeController }) {
           </Typography>
         </Link>
 
-        <Stack direction="row" justifyContent="flex-end" sx={{ width: "100%" }} gap="30px">
+        <Stack direction="row" justifyContent="flex-end" sx={{ width: "100%" }} alignItems="center" gap="30px">
           <Link to="/about" style={{ textDecoration: "none", color: "white" }} className="navLink">
             <Typography variant="h6" noWrap component="div">
               About
