@@ -126,7 +126,8 @@ router.get("/allGroupExpenses/:id", (req, res) => {
     "user".username FROM "expenses"
     JOIN "categories" ON "categories".id = "expenses"."categoryId"
     JOIN "user" ON "user".id = "expenses"."userId"
-    WHERE "budget_id" = $1;
+    WHERE "budget_id" = $1
+    ORDER BY "expenses".id DESC;
   ;`;
 
   pool

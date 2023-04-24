@@ -1,7 +1,7 @@
 import * as React from "react";
 import MuiAlert from "@mui/material/Alert";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   TextField,
   Button,
@@ -28,6 +28,8 @@ const AddExpenseForm = ({ categories, groupId }) => {
 
   const dispatch = useDispatch();
 
+  const currentGroup = useSelector(store => store.currentGroup);
+
   const handleChange = (category) => {
     setNewExpense({
       ...newExpense,
@@ -40,6 +42,7 @@ const AddExpenseForm = ({ categories, groupId }) => {
     if (newExpense.name && newExpense.categoryName && newExpense.amount) {
       let expensePayload = { ...newExpense, budgetId: groupId };
       dispatch({ type: "ADD_NEW_EXPENSE", payload: expensePayload });
+      dispatch({ type: "FETCH_ALL_GROUP_EXPENSES", payload: currentGroup.id })
       setNewExpense({ name: "", categoryName: "", amount: "" });
       setSuccessSnackOpen(true);
     } else {
