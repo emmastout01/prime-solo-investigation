@@ -1,15 +1,20 @@
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid, Stack, Button } from "@mui/material";
+import { Grid, Stack, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./BudgetCategoryTable.css";
+import categoryTotals from "../../redux/reducers/categoryTotals.reducer";
+import expenses from "../../redux/reducers/expenses.reducer";
 
 const BudgetCategoryTable = ({ category }) => {
   const [selections, setSelections] = useState([]);
   const dispatch = useDispatch();
   const currentGroup = useSelector((store) => store.currentGroup);
+
+  let categoryTotal = 0;
+  category.expenses.map((expense) => (categoryTotal += expense.expenseAmount));
 
   const columns = [
     {
@@ -70,22 +75,42 @@ const BudgetCategoryTable = ({ category }) => {
 
   return (
     <Grid item xs={6}>
-      <Stack direction="row" justifyContent="space-between">
-        <h3>{category.name}</h3>
-        <h3>Target Budget Amount: {category.budgetAmount}</h3>
+      <Stack direction="column" gap="10px">
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="h5">{category.name}</Typography>
+          <Typography variant="h5">
+            Target Budget Amount: {category.budgetAmount}
+          </Typography>
+        </Stack>
+        <Stack
+          direction="row"
+          width="100%"
+          justifyContent="flex-end"
+          marginBottom="20px"
+        >
+          {categoryTotal > category.budgetAmount ? (
+            <Typography variant="h5" color="red">
+              Total Spent: {categoryTotal}
+            </Typography>
+          ) : (
+            <Typography variant="h5">Total Spent: {categoryTotal}</Typography>
+          )}
+        </Stack>
       </Stack>
+
       <Box sx={{ height: 400, width: "100%", marginBottom: "20px" }}>
         <DataGrid
           rows={rows}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          pageSizeOptions={[5]}
+          // initialState={{
+          //   pagination: {
+          //     paginationModel: {
+          //       pageSize: 5,
+          //     },
+          //   },
+          // }}
+          // pageSizeOptions={[5]}
+          autoPageSize
           checkboxSelection
           disableRowSelectionOnClick
           onSelectionModelChange={(newSelection) => {
@@ -101,7 +126,7 @@ const BudgetCategoryTable = ({ category }) => {
           </Button>
         )}
 
-        <Stack direction="row" justifyContent="flex-end" sx={{width: "100%"}}>
+        <Stack direction="row" justifyContent="flex-end" sx={{ width: "100%" }}>
           <Button variant="contained" onClick={deleteCategory} color="error">
             Delete Category
           </Button>

@@ -11,6 +11,7 @@ import {
   Select,
   FormControl,
   Snackbar,
+  Typography
 } from "@mui/material";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -61,7 +62,7 @@ const AddExpenseForm = ({ categories, groupId }) => {
 
   return (
     <div>
-      <h3>Add Expense</h3>
+      <Typography variant="h5" margin="20px 0px">Add New Expense</Typography>
       <Stack direction="row" spacing={2} sx={{ marginBottom: "40px" }}>
         <FormControl>
           <InputLabel id="demo-simple-select-label">Category</InputLabel>
@@ -91,7 +92,7 @@ const AddExpenseForm = ({ categories, groupId }) => {
         </FormControl>
         <TextField
           type="text"
-          label="Expense"
+          label="Expense Name"
           variant="outlined"
           value={newExpense.name}
           onChange={(e) =>

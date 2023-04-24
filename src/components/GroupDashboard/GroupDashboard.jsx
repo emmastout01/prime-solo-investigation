@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Box, Button, Stack } from "@mui/material";
+import { Grid, Box, Button, Stack, Typography } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import BudgetCategoryTable from "../BudgetCategoryTable/BudgetCategoryTable";
 import AddExpenseForm from "../AddExpenseForm/AddExpenseForm";
@@ -45,7 +45,7 @@ const GroupDashboard = () => {
         alignItems="center"
         sx={{ height: "40px", marginBottom: "40px" }}
       >
-        <h1>{currentGroup.name}</h1>
+        <Typography variant="h4">{currentGroup.name}</Typography>
         <Button
           variant="contained"
           onClick={() => history.push(`/allExpenses/${groupId.id}`)}
@@ -57,13 +57,13 @@ const GroupDashboard = () => {
         <Stack direction="column" width="80%">
           {/* Display monthly income before tax */}
           {/* stretch: implement monthly take home based on taxes by state */}
-          <h2>Monthly Income: {Math.round(currentGroup.totalBudget / 12)}</h2>
+          <Typography variant="h5">Monthly Income: {Math.round(currentGroup.totalBudget / 12)}</Typography>
 
           {/* look up stack mui for arranging items in line */}
           <AddExpenseForm groupId={currentGroup.id} categories={categories} />
           <AddCategoryForm budgetId={currentGroup.id} groupId={groupId} />
 
-          <Stack justifyContent="flex-start" width="100%" direction="row">
+          <Stack justifyContent="flex-start" width="100%" direction="row" marginBottom="20px">
             <Button variant="contained" onClick={deleteAllExpenses}>
               Reset Expenses
             </Button>

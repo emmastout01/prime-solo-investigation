@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TextField, Button, Stack, Snackbar } from "@mui/material";
+import { TextField, Button, Stack, Snackbar, Typography } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -44,8 +44,8 @@ const AddCategoryForm = ({ groupId, budgetId }) => {
 
   return (
     <div>
-      <h3>Add Category</h3>
-      <Stack direction="row" spacing={2} sx={{ marginBottom: "40px" }}>
+      <Typography variant="h5">Add New Category</Typography>
+      <Stack direction="row" spacing={2} sx={{ margin: "20px 0px 40px 0px" }}>
         <TextField
           type="text"
           label="Category"

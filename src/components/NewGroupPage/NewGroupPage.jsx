@@ -7,6 +7,7 @@ import {
   Snackbar,
   Autocomplete,
 } from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
 import MuiAlert from "@mui/material/Alert";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect } from "react";
@@ -248,9 +249,10 @@ const NewGroupPage = () => {
             /> */}
 
             <Autocomplete
-              id="free-solo-demo"
-              options={allUsers.filter(user => user.username != currentUser.username).map((user) => user.username)}
-              sx={{ width: "100%" }}
+              options={allUsers
+                .filter((user) => user.username != currentUser.username)
+                .map((user) => user.username)}
+              sx={{ width: "60%" }}
               onSelect={(e) => setUsername(e.target.value)}
               renderInput={(params) => (
                 <TextField
@@ -272,7 +274,17 @@ const NewGroupPage = () => {
               Add User
             </Button>
           </div>
-          <p>{addedUser}</p>
+          <p>
+            {addedUser && (
+              <Stack
+                direction="row"
+                alignItems="center"
+                gap="10px"
+              >
+                <CheckIcon /> {addedUser}
+              </Stack>
+            )}
+          </p>
         </div>
       </div>
       <center>

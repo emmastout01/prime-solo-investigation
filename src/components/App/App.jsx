@@ -40,6 +40,7 @@ const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 function Controller() {
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
+  
   return (
       <IconButton
         sx={{ ml: 1 }}
@@ -68,6 +69,7 @@ function Controller() {
 // });
 
 function App() {
+  // move state to reducer to make user choice persistent on page load.
   const [mode, setMode] = React.useState("light");
   const colorMode = React.useMemo(
     () => ({
@@ -77,6 +79,7 @@ function App() {
     }),
     []
   );
+
   const dispatch = useDispatch();
 
   const user = useSelector((store) => store.user);
