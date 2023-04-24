@@ -104,4 +104,25 @@ router.delete("/delete/:id", (req, res) => {
     });
 });
 
+router.put("/update/:id", (req, res) => {
+  const idToUpdate = req.params.id;
+  const category = req.body;
+  const sqlText= `
+    UPDATE "categories" 
+    SET "name" = $1,
+    "budgetAmount" = $2
+    WHERE "id" = $3
+  ;`;
+
+  pool
+  .query(sqlText, [category.name, category.value, idToUpdate])
+  .then((result) => {
+    res.sendStatus(200);
+  })
+  .catch((err) => {
+    console.log("Update category request failed:", err);
+    res.sendStatus(500);
+  });
+})
+
 module.exports = router;

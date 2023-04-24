@@ -42,11 +42,21 @@ function* fetchCategoryTotals(action) {
    }
 }
 
+function* updateCategory(action) {
+   try {
+    yield axios.put(`/api/categories/update/${action.payload.id}`, action.payload);
+    yield put({ type: 'FETCH_GROUP_CATEGORIES', payload: action.payload.budgetId })
+   } catch (error) {
+    console.log('Error in udpateCategory saga', error)
+   }
+}
+
 function* categorySaga() {
   yield takeLatest('ADD_NEW_CATEGORY', addNewCategory);
   yield takeLatest('FETCH_GROUP_CATEGORIES', fetchGroupCategories);
   yield takeLatest('DELETE_CATEGORY', deleteCategory);
   yield takeLatest('FETCH_CATEGORY_TOTALS', fetchCategoryTotals);
+  yield takeLatest('UPDATE_CATEGORY', updateCategory)
 }
 
 export default categorySaga;

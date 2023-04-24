@@ -1,6 +1,15 @@
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid, Stack, Button, Typography } from "@mui/material";
+import {
+  Grid,
+  Stack,
+  Button,
+  Typography,
+  IconButton,
+  TextField,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,7 +19,11 @@ import expenses from "../../redux/reducers/expenses.reducer";
 
 const BudgetCategoryTable = ({ category }) => {
   const [selections, setSelections] = useState([]);
+  const [editedCategory, setEditedCategory] = useState({ name: "", value: "" });
+  const [editToggle, setEditToggle] = useState(false);
+
   const dispatch = useDispatch();
+
   const currentGroup = useSelector((store) => store.currentGroup);
 
   let categoryTotal = 0;
@@ -58,7 +71,6 @@ const BudgetCategoryTable = ({ category }) => {
     }
     updatedExpenseObj.budgetId = currentGroup.id;
     updatedExpenseObj.id = params.id;
-    // console.log(updatedExpenseObj);
 
     dispatch({ type: "UPDATE_EXPENSE", payload: updatedExpenseObj });
   };
@@ -71,29 +83,83 @@ const BudgetCategoryTable = ({ category }) => {
     dispatch({ type: "DELETE_CATEGORY", payload: deleteCategoryObj });
   };
 
-  // console.log("newSelections:", selections);
+  const handleEditSave = () => {
+    if (editedCategory.name && editedCategory.value) {
+      const editedCategoryObj = {
+        name: editedCategory.name,
+        value: Number(editedCategory.value),
+        id: category.id,
+        budgetId: currentGroup.id,
+      };
+      dispatch({ type: "UPDATE_CATEGORY", payload: editedCategoryObj });
+      setTimeout(() => {  
+        setEditToggle(false);
+        setEditedCategory({ name: "", value: "" });
+      }, 200);
+    }
+  };
+
+  const handleEditClick = () => {
+    setEditToggle(!editToggle);
+    setEditedCategory({ name: category.name, value: category.budgetAmount });
+  }
+
+  // console.log(editedCategory);
 
   return (
     <Grid item xs={6}>
       <Stack direction="column" gap="10px">
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="h5">{category.name}</Typography>
-          <Typography variant="h5">
-            Target Budget Amount: {category.budgetAmount}
-          </Typography>
-        </Stack>
+        {editToggle ? (
+          <Stack direction="row" justifyContent="space-between">
+            <TextField
+              type="text"
+              label="Category Name"
+              variant="outlined"
+              value={editedCategory.name}
+              onChange={(e) =>
+                setEditedCategory({ ...editedCategory, name: e.target.value })
+              }
+            />
+            <TextField
+              type="number"
+              label="Category Value"
+              variant="outlined"
+              value={editedCategory.value}
+              onChange={(e) =>
+                setEditedCategory({
+                  ...editedCategory,
+                  value: e.target.value,
+                })
+              }
+            />
+            <Button variant="contained" onClick={() => handleEditSave()}>
+              Save
+            </Button>
+          </Stack>
+        ) : (
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="h6">{category.name}</Typography>
+            <Typography variant="h6">
+              Target Budget Amount: {category.budgetAmount}
+            </Typography>
+          </Stack>
+        )}
+
         <Stack
           direction="row"
           width="100%"
-          justifyContent="flex-end"
-          marginBottom="20px"
+          justifyContent="space-between"
+          marginBottom="10px"
         >
+          <IconButton onClick={() => handleEditClick()}>
+            <EditIcon></EditIcon>
+          </IconButton>
           {categoryTotal > category.budgetAmount ? (
-            <Typography variant="h5" color="red">
+            <Typography variant="h6" color="red">
               Total Spent: {categoryTotal}
             </Typography>
           ) : (
-            <Typography variant="h5">Total Spent: {categoryTotal}</Typography>
+            <Typography variant="h6">Total Spent: {categoryTotal}</Typography>
           )}
         </Stack>
       </Stack>
@@ -126,7 +192,7 @@ const BudgetCategoryTable = ({ category }) => {
           </Button>
         )}
 
-        <Stack direction="row" justifyContent="flex-end" sx={{ width: "100%" }}>
+        <Stack direction="row" justifyContent="flex-end" sx={{ width: "100%", marginBottom:"20px" }}>
           <Button variant="contained" onClick={deleteCategory} color="error">
             Delete Category
           </Button>
