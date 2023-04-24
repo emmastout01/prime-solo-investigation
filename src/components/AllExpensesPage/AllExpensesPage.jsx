@@ -14,7 +14,7 @@ const AllExpensesPage = () => {
   const categoryTotals = useSelector((store) => store.categoryTotals);
 
   return (
-    <div className="expense-page-wrapper">
+    <div className="main-wrapper">
       <Stack direction="row" justifyContent="space-between">
         <h1>{currentGroup.name}</h1>
         <Button

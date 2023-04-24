@@ -21,6 +21,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+import App from "../App/App";
+
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -68,7 +70,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-const SideBar = () => {
+const SideBar = ( { component }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const user = useSelector((store) => store.user);
@@ -204,7 +206,7 @@ const SideBar = () => {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        {/* <UserDashboard /> */}
+        {component}
       </Main>
     </Box>
   );

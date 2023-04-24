@@ -39,7 +39,7 @@ function App() {
   return (
     <Router>
       <div>
-        {user.id ? <SideBar /> : <Nav />}
+        {user.id ? <></> : <Nav />}
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
           <Redirect exact from="/" to="/home" />
@@ -50,7 +50,7 @@ function App() {
             exact
             path="/about"
           >
-            <AboutPage />
+            {user.id ? <SideBar component={<AboutPage />} /> : <AboutPage />}
           </Route>
 
           {/* For protected routes, the view could show one of several things on the same route.
@@ -62,7 +62,7 @@ function App() {
             exact
             path="/user"
           >
-            <UserPage />
+            <SideBar component={<UserPage />} />
           </ProtectedRoute>
 
           <ProtectedRoute
@@ -70,23 +70,23 @@ function App() {
             exact
             path="/info"
           >
-            <InfoPage />
+            <SideBar component={<InfoPage />} />
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/newGroup">
-            <NewGroupPage />
+            <SideBar component={<NewGroupPage />} />
           </ProtectedRoute>
 
           <ProtectedRoute exact path='/groupDashboard/:id'>
-            <GroupDashboard />
+            <SideBar component={<GroupDashboard />} />
           </ProtectedRoute>
 
           <ProtectedRoute exact path='/profile'>
-            <UserProfile />
+            <SideBar component={<UserProfile />} />
           </ProtectedRoute>
 
           <ProtectedRoute exact path='/allExpenses/:id'>
-            <AllExpensesPage />
+            <SideBar component={<AllExpensesPage />} />
           </ProtectedRoute>
 
           <Route exact path="/login">
