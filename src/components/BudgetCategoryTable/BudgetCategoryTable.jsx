@@ -185,14 +185,14 @@ const BudgetCategoryTable = ({ category }) => {
           onCellEditCommit={(params) => handleCellEditCommit(params)}
         />
       </Box>
-      <Stack direction="row" justifyContent="space-between">
+      <Stack direction="row" justifyContent="space-between" sx={{marginBottom:"20px"}}>
         {selections[0] && (
           <Button variant="contained" onClick={handleDelete} color="error">
             Delete
           </Button>
         )}
 
-        <Stack direction="row" justifyContent="flex-end" sx={{ width: "100%", marginBottom:"20px" }}>
+        <Stack direction="row" justifyContent="flex-end" sx={{ width: "100%" }}>
           <Button variant="contained" onClick={deleteCategory} color="error">
             Delete Category
           </Button>
