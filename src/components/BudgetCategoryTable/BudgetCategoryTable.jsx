@@ -92,7 +92,7 @@ const BudgetCategoryTable = ({ category }) => {
         budgetId: currentGroup.id,
       };
       dispatch({ type: "UPDATE_CATEGORY", payload: editedCategoryObj });
-      setTimeout(() => {  
+      setTimeout(() => {
         setEditToggle(false);
         setEditedCategory({ name: "", value: "" });
       }, 200);
@@ -102,7 +102,7 @@ const BudgetCategoryTable = ({ category }) => {
   const handleEditClick = () => {
     setEditToggle(!editToggle);
     setEditedCategory({ name: category.name, value: category.budgetAmount });
-  }
+  };
 
   // console.log(editedCategory);
 
@@ -138,7 +138,9 @@ const BudgetCategoryTable = ({ category }) => {
           </Stack>
         ) : (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h6">{category.name}</Typography>
+            <IconButton onClick={() => handleEditClick()}>
+              <EditIcon></EditIcon>
+            </IconButton>
             <Typography variant="h6">
               Target Budget Amount: {category.budgetAmount}
             </Typography>
@@ -151,9 +153,7 @@ const BudgetCategoryTable = ({ category }) => {
           justifyContent="space-between"
           marginBottom="10px"
         >
-          <IconButton onClick={() => handleEditClick()}>
-            <EditIcon></EditIcon>
-          </IconButton>
+          <Typography variant="h5">{category.name}</Typography>
           {categoryTotal > category.budgetAmount ? (
             <Typography variant="h6" color="red">
               Total Spent: {categoryTotal}
@@ -185,7 +185,11 @@ const BudgetCategoryTable = ({ category }) => {
           onCellEditCommit={(params) => handleCellEditCommit(params)}
         />
       </Box>
-      <Stack direction="row" justifyContent="space-between" sx={{marginBottom:"20px"}}>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        sx={{ marginBottom: "20px" }}
+      >
         {selections[0] && (
           <Button variant="contained" onClick={handleDelete} color="error">
             Delete

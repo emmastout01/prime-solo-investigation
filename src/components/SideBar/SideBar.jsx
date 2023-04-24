@@ -194,7 +194,7 @@ const SideBar = ({ component, darkModeController }) => {
                       <Typography>{group.name}</Typography>
                     </AccordionSummary>
                     <AccordionDetails
-                      style={{ padding: "0px", backgroundColor: "#e0e0e0" }}
+                      style={{ padding: "0px", }}
                     >
                       <ListItem disablePadding>
                         <ListItemButton
