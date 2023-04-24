@@ -1,6 +1,6 @@
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
@@ -70,7 +70,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-const SideBar = ( { component }) => {
+const SideBar = ({ component, darkModeController }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const user = useSelector((store) => store.user);
@@ -100,14 +100,14 @@ const SideBar = ( { component }) => {
           >
             <MenuIcon />
           </IconButton>
-
-          <div className="links">
+          <Stack direction="row" width="100%" justifyContent="space-between" alignItems="center">
             <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
               <Typography variant="h5" noWrap component="div">
                 Budget App
               </Typography>
             </Link>
-          </div>
+            {darkModeController}
+          </Stack>
         </Toolbar>
       </AppBar>
       <Drawer

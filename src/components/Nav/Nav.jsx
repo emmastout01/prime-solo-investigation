@@ -4,7 +4,7 @@ import "./Nav.css";
 import { useSelector } from "react-redux";
 import { AppBar, Toolbar, Typography, Stack } from "@mui/material";
 
-function Nav() {
+function Nav({ darkModeController }) {
   const user = useSelector((store) => store.user);
 
   return (
@@ -55,6 +55,7 @@ function Nav() {
               Login / Register
             </Typography>
           </Link>
+          {darkModeController}
         </Stack>
       </Toolbar>
     </AppBar>

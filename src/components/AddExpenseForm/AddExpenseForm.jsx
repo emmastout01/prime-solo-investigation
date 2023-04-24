@@ -28,7 +28,7 @@ const AddExpenseForm = ({ categories, groupId }) => {
 
   const dispatch = useDispatch();
 
-  const currentGroup = useSelector(store => store.currentGroup);
+  const currentGroup = useSelector((store) => store.currentGroup);
 
   const handleChange = (category) => {
     setNewExpense({
@@ -42,7 +42,7 @@ const AddExpenseForm = ({ categories, groupId }) => {
     if (newExpense.name && newExpense.categoryName && newExpense.amount) {
       let expensePayload = { ...newExpense, budgetId: groupId };
       dispatch({ type: "ADD_NEW_EXPENSE", payload: expensePayload });
-      dispatch({ type: "FETCH_ALL_GROUP_EXPENSES", payload: currentGroup.id })
+      dispatch({ type: "FETCH_ALL_GROUP_EXPENSES", payload: currentGroup.id });
       setNewExpense({ name: "", categoryName: "", amount: "" });
       setSuccessSnackOpen(true);
     } else {
@@ -112,24 +112,32 @@ const AddExpenseForm = ({ categories, groupId }) => {
         </Button>
       </Stack>
 
-      <Snackbar
-        open={errorSnackOpen}
-        autoHideDuration={6000}
-        onClose={handleClose}
-      >
-        <Alert onClose={() => setErrorSnackOpen(false)} severity="error" sx={{ width: "100%" }}>
-          Must provide category, name of expense and amount.
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={successSnackOpen}
-        autoHideDuration={6000}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          Expense added!
-        </Alert>
-      </Snackbar>
+        <Snackbar
+          open={errorSnackOpen}
+          autoHideDuration={3000}
+          onClose={handleClose}
+        >
+          <Alert
+            onClose={() => setErrorSnackOpen(false)}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            Must provide category, name of expense and amount.
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={successSnackOpen}
+          autoHideDuration={3000}
+          onClose={handleClose}
+        >
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Expense added!
+          </Alert>
+        </Snackbar>
     </div>
   );
 };
