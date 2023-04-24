@@ -1,7 +1,14 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Grid,
+  Box,
+  Button,
+  Stack,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import { useHistory } from "react-router-dom";
 import BudgetCategoryTable from "../BudgetCategoryTable/BudgetCategoryTable";
 import AddExpenseForm from "../AddExpenseForm/AddExpenseForm";
@@ -14,6 +21,7 @@ const GroupDashboard = () => {
   const groupId = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
+  const [loading, setLoading] = useState(true);
 
   const categories = useSelector((store) => store.categories);
   const currentGroup = useSelector((store) => store.currentGroup);
@@ -37,56 +45,83 @@ const GroupDashboard = () => {
     dispatch({ type: "DELETE_ALL_EXPENSES", payload: currentGroup.id });
   };
 
+  setTimeout(() => {
+    setLoading(false);
+  }, 1500);
+
   return (
     <div className="main-wrapper">
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ height: "40px", marginBottom: "40px" }}
-      >
-        <Typography variant="h4">{currentGroup.name}</Typography>
-        <Button
-          variant="contained"
-          onClick={() => history.push(`/allExpenses/${groupId.id}`)}
-        >
-          All Expenses
-        </Button>
-      </Stack>
-      <Stack direction="row" gap="40px">
-        <Stack direction="column" width="80%">
-          {/* Display monthly income before tax */}
-          {/* stretch: implement monthly take home based on taxes by state */}
-          <Typography variant="h5">Monthly Income: {Math.round(currentGroup.totalBudget / 12)}</Typography>
-
-          {/* look up stack mui for arranging items in line */}
-          <AddExpenseForm groupId={currentGroup.id} categories={categories} />
-          <AddCategoryForm budgetId={currentGroup.id} groupId={groupId} />
-
-          <Stack justifyContent="flex-start" width="100%" direction="row" marginBottom="20px">
-            <Button variant="contained" onClick={deleteAllExpenses}>
-              Reset Expenses
-            </Button>
-          </Stack>
-
+      {loading ? (
+        <Stack direction="column" justifyContent="center" alignItems="center" sx={{marginTop: "25%"}}>
           <Box>
-            <Grid
-              container
-              rowSpacing={1}
-              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            >
-              {categories[0] ? (
-                categories.map((category) => (
-                  <BudgetCategoryTable key={category.id} category={category} />
-                ))
-              ) : (
-                <></>
-              )}
-            </Grid>
+            <CircularProgress />
           </Box>
         </Stack>
-        <ActivityFeed allExpenses={allExpenses} />
-      </Stack>
+      ) : (
+        <div>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ height: "40px", marginBottom: "40px" }}
+          >
+            <Typography variant="h4">{currentGroup.name}</Typography>
+            <Button
+              variant="contained"
+              onClick={() => history.push(`/allExpenses/${groupId.id}`)}
+            >
+              All Expenses
+            </Button>
+          </Stack>
+          <Stack direction="row" gap="40px">
+            <Stack direction="column" width="80%">
+              {/* Display monthly income before tax */}
+              {/* stretch: implement monthly take home based on taxes by state */}
+              <Typography variant="h5">
+                Monthly Income: {Math.round(currentGroup.totalBudget / 12)}
+              </Typography>
+
+              {/* look up stack mui for arranging items in line */}
+              <AddExpenseForm
+                groupId={currentGroup.id}
+                categories={categories}
+              />
+              <AddCategoryForm budgetId={currentGroup.id} groupId={groupId} />
+
+              <Stack
+                justifyContent="flex-start"
+                width="100%"
+                direction="row"
+                marginBottom="20px"
+              >
+                <Button variant="contained" onClick={deleteAllExpenses}>
+                  Reset Expenses
+                </Button>
+              </Stack>
+
+              <Box>
+                <Grid
+                  container
+                  rowSpacing={1}
+                  columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                >
+                  {categories[0] ? (
+                    categories.map((category) => (
+                      <BudgetCategoryTable
+                        key={category.id}
+                        category={category}
+                      />
+                    ))
+                  ) : (
+                    <></>
+                  )}
+                </Grid>
+              </Box>
+            </Stack>
+            <ActivityFeed allExpenses={allExpenses} />
+          </Stack>
+        </div>
+      )}
     </div>
   );
 };

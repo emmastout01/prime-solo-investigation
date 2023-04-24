@@ -1,6 +1,13 @@
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
-import { Box, Button, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
@@ -16,12 +23,11 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { useState, useEffect } from "react";
-
-import App from "../App/App";
 
 const drawerWidth = 240;
 
@@ -86,6 +92,13 @@ const SideBar = ({ component, darkModeController }) => {
     setOpen(false);
   };
 
+  const handleAllExpensesClick = (group) => {
+    // dispatch({ type: "UNSET_CATEGORY_TOTALS" })
+    // dispatch({ type: "FETCH_CATEGORY_TOTALS", payload: group.id });
+    dispatch({ type: "SET_CURRENT_GROUP", payload: group });
+    history.push(`/allExpenses/${group.groupId}`);
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -100,7 +113,12 @@ const SideBar = ({ component, darkModeController }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Stack direction="row" width="100%" justifyContent="space-between" alignItems="center">
+          <Stack
+            direction="row"
+            width="100%"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
               <Typography variant="h5" noWrap component="div">
                 Budget App
@@ -142,32 +160,16 @@ const SideBar = ({ component, darkModeController }) => {
                   <ListItemText primary={"Home"} />
                 </ListItemButton>
               </ListItem>
-
               <ListItem disablePadding>
                 <ListItemButton onClick={() => history.push("/info")}>
                   <ListItemText primary={"Info"} />
                 </ListItemButton>
               </ListItem>
-
               <ListItem disablePadding>
                 <ListItemButton onClick={() => history.push("/about")}>
                   <ListItemText primary={"About"} />
                 </ListItemButton>
-              </ListItem>
-
-              {groups[0] &&
-                groups.map((group) => (
-                  <ListItem disablePadding key={group.id}>
-                    <ListItemButton
-                      onClick={() =>
-                        history.push(`/groupDashboard/${group.groupId}`)
-                      }
-                    >
-                      <ListItemText primary={group.name} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-
+              </ListItem>{" "}
               <ListItem disablePadding>
                 <ListItemButton onClick={() => history.push("/newGroup")}>
                   <ListItemText primary={"Create New Group"} />
@@ -176,12 +178,49 @@ const SideBar = ({ component, darkModeController }) => {
 
               <Divider />
 
+              {groups[0] &&
+                groups.map((group) => (
+                  <Accordion
+                    key={group.id}
+                    disableGutters={true}
+                    square={true}
+                    style={{ boxShadow: "none" }}
+                  >
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography>{group.name}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails
+                      style={{ padding: "0px", backgroundColor: "#e0e0e0" }}
+                    >
+                      <ListItem disablePadding>
+                        <ListItemButton
+                          onClick={() =>
+                            history.push(`/groupDashboard/${group.groupId}`)
+                          }
+                        >
+                          <ListItemText primary={"Group Dashboard"} />
+                        </ListItemButton>
+                      </ListItem>
+                      <ListItem disablePadding>
+                        <ListItemButton
+                          onClick={() => handleAllExpensesClick(group)}
+                        >
+                          <ListItemText primary={"All Expenses"} />
+                        </ListItemButton>
+                      </ListItem>
+                    </AccordionDetails>
+                  </Accordion>
+                ))}
+              <Divider />
               <ListItem disablePadding>
                 <ListItemButton onClick={() => history.push("/profile")}>
                   <ListItemText primary={user.username} />
                 </ListItemButton>
               </ListItem>
-
               <ListItem disablePadding>
                 <ListItemButton onClick={() => dispatch({ type: "LOGOUT" })}>
                   <ListItemText primary={"Logout"} />
@@ -190,19 +229,6 @@ const SideBar = ({ component, darkModeController }) => {
             </>
           )}
         </List>
-        {/* <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
